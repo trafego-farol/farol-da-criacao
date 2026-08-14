@@ -1,0 +1,46 @@
+# ============================================================
+#  NUNCA versionar — credenciais
+# ============================================================
+api_key.txt
+iclips_key.txt
+iclips_id.txt
+api_conexao.json
+farol_config.json
+*.token
+*.key
+.env
+
+# ============================================================
+#  NUNCA versionar — dados pessoais e de clientes
+#  Os relatórios do iClips têm nome, produtividade e horas de
+#  ~40 pessoas, além de nomes de peças e clientes.
+# ============================================================
+dados/
+relatorios/
+*.xls
+*.xlsx
+*.pkl
+amostra_api.json
+api_pauta.json
+api_atividades.json
+snapshot_pauta.json
+snapshots_hist.json
+
+# ============================================================
+#  Saída gerada (o dashboard sai do robô, não do repositório)
+# ============================================================
+index.html
+Farol_*.html
+farol_artifact_update.html
+
+# ============================================================
+#  Lixo de sistema
+# ============================================================
+__pycache__/
+*.py[cod]
+.DS_Store
+Thumbs.db
+desktop.ini
+~$*
+!dados/LEIA-ME.md
+!relatorios/LEIA-ME.md

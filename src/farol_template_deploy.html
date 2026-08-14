@@ -1,0 +1,1788 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vanguarda Martech · Farol da Criação</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
+<style>
+/* Identidade Vanguarda Martech — cores extraídas do logo oficial:
+   vermelho #E11121 · grafite #1D1E1C · cinza claro #F4F4F4 · branco #FFF */
+:root{color-scheme:light;--navy:#1D1E1C;--red:#E11121;--graf:#33373D;--light:#ECEEF1;--orange:#ED7D31;--green:#2E7D32;--grey:#F4F4F4;--border:#e4e5e3}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter','Segoe UI',system-ui,-apple-system,Arial,sans-serif}
+body{background:var(--grey);color:#1c2530;padding-bottom:48px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+header{background:var(--navy);border-bottom:3px solid var(--red);color:#fff;padding:20px 34px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;box-shadow:0 2px 16px rgba(22,29,37,.18)}
+header h1{font-size:21px;font-weight:700;letter-spacing:-.3px}
+header .sub{font-size:12px;opacity:.82;margin-top:4px;letter-spacing:.2px}
+.limite-box{font-size:11.5px;text-align:right}
+.limite-box input{width:auto;min-width:50px;max-width:130px;padding:4px 6px;border-radius:6px;border:none;font-size:14px;font-weight:700;color:var(--navy);text-align:center}
+.wrap{max-width:1280px;margin:0 auto;padding:0 20px}
+.tabs-nav{display:flex;gap:8px;margin:16px 0 6px;flex-wrap:wrap}
+.tabs-nav button{padding:9px 20px;border:1px solid var(--border);border-radius:20px;background:#fff;font-size:13px;font-weight:700;color:var(--navy);cursor:pointer;transition:all .16s ease}
+.tabs-nav button:hover{border-color:var(--navy);transform:translateY(-1px)}
+.tabs-nav button.on{background:var(--navy);color:#fff;border-color:var(--navy);box-shadow:0 4px 12px rgba(22,29,37,.18)}
+#hidChips{margin:6px 0 12px;font-size:11.5px;color:#778}
+#hidChips .chip{display:inline-block;margin:2px 4px;padding:3px 10px;border-radius:12px;background:#fff;border:1px dashed var(--border);color:var(--navy);font-weight:600;cursor:pointer}
+.page{display:none}
+.page.on{display:block}
+.sec{position:relative;margin-bottom:14px}
+.sec:not(.card){padding-top:24px}
+.sec.card{margin-top:0}
+.xbtn{position:absolute;top:8px;right:10px;z-index:5;border:1px solid var(--border);border-radius:12px;background:#fff;color:#667;font-weight:700;cursor:pointer;font-size:11.5px;padding:3px 10px}
+.xbtn:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
+.sec.clps > *:not(.clpsbar){display:none !important}
+.clpsbar{display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px dashed var(--border);border-radius:10px;padding:8px 14px;font-size:12px;color:#667;font-weight:600}
+.clpsbar button{padding:4px 14px;border:1px solid var(--border);border-radius:12px;background:var(--light);color:var(--navy);font-weight:700;font-size:11.5px;cursor:pointer}
+.clpsbar button:hover{background:var(--navy);color:#fff}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:10px;background:transparent}
+.kpi{background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px 16px;box-shadow:0 1px 2px rgba(16,20,26,.04),0 6px 16px rgba(16,20,26,.05);min-height:78px;display:flex;flex-direction:column;justify-content:center;transition:transform .16s ease,box-shadow .16s ease}
+.kpi:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(16,20,26,.05),0 12px 24px rgba(16,20,26,.08)}
+.kpi .v{font-size:23px;font-weight:800;color:var(--navy);line-height:1.2;letter-spacing:-.4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpi .l{font-size:11.5px;font-weight:700;color:#8a919b;text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
+.kpi.alert .v{color:var(--red)}
+.kpi.good .v{color:var(--green)}
+.card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px 20px;box-shadow:0 1px 2px rgba(16,20,26,.04),0 6px 16px rgba(16,20,26,.05)}
+.card h3{font-size:13px;color:var(--navy);margin-bottom:10px;text-transform:uppercase;letter-spacing:.4px;padding-right:26px}
+.card h3 small{font-weight:400;text-transform:none;color:#778}
+.grid2{display:grid;grid-template-columns:1.4fr 1fr;gap:14px}
+.chart-box{position:relative;height:280px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{font-size:11.5px;background:var(--navy);color:#fff;padding:7px 8px;text-align:left;font-size:11.5px;position:sticky;top:0}
+td{padding:6px 8px;border-bottom:1px solid #eef1f7}
+tr:nth-child(even) td{background:#f8fafd}
+.scroll{max-height:560px;overflow-y:auto;overflow-x:auto;border:1px solid var(--border);border-radius:8px}
+.scroll table{min-width:640px}
+.scroll th:first-child,.scroll td:first-child{position:sticky;left:0;background:#fff;z-index:2}
+.scroll th:first-child{background:var(--navy);z-index:3}
+.scroll tr:nth-child(even) td:first-child{background:#f8fafd}
+.da-head td:first-child{background:#eef0f2!important}
+.grp-head td:first-child{background:var(--navy)!important}
+.b-grey{background:#EEF0F1;color:#5A5D5F}
+.badge{padding:2px 8px;border-radius:10px;font-size:11.5px;font-weight:700;white-space:nowrap}
+.b-red{background:#fde8e8;color:var(--red)}
+.b-orange{background:#fdf0e4;color:#b05a10}
+.b-green{background:#e7f4e8;color:var(--green)}
+.b-blue{background:var(--light);color:var(--navy)}
+.grp-head td{background:var(--navy) !important;color:#fff;font-weight:700;font-size:11.5px;text-transform:uppercase;letter-spacing:.4px;padding:8px}
+.da-head{cursor:pointer}
+.da-head td{background:#eef0f2 !important;font-weight:600}
+.da-head.over td{background:#fdecec !important}
+.da-head:hover td{background:#e6e8eb !important}
+.job-row td{font-size:11.5px;color:#334}
+.car{display:inline-block;transition:transform .15s;font-size:11.5px;color:var(--navy)}
+.exp .car{transform:rotate(90deg)}
+.util-bar{background:#e9edf5;border-radius:6px;height:14px;position:relative;min-width:80px}
+.util-bar span{position:absolute;left:0;top:0;bottom:0;border-radius:6px;background:var(--graf)}
+.util-bar.over span{background:var(--red)}
+.util-bar i{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--navy)}
+.rate-bar{background:#e9edf5;border-radius:6px;height:14px;position:relative;min-width:80px}
+.rate-bar span{position:absolute;left:0;top:0;bottom:0;border-radius:6px;background:var(--green)}
+.rate-bar.low span{background:var(--red)}
+.rate-bar.mid span{background:var(--orange)}
+.nuc{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.ncard{background:#fbfbfc;border:1px solid var(--border);border-left:4px solid var(--red);border-radius:10px;padding:12px 14px}
+.ncard h5{font-size:13px;color:var(--navy);margin-bottom:2px}
+.ncard .pr{font-size:11.5px;color:#778;margin-bottom:8px}
+.ncard .nums{font-size:12px;color:#334;margin-bottom:6px}
+.plan{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start}
+.plan .col{flex:1;min-width:220px}
+.plan h4{font-size:11.5px;color:#667;text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
+.chip2{display:inline-block;margin:2px 4px 2px 0;padding:3px 10px;border-radius:12px;font-size:11.5px;font-weight:600}
+.c-red{background:#fde8e8;color:var(--red)}
+.c-green{background:#e7f4e8;color:var(--green)}
+.plan .big{font-size:26px;font-weight:800;color:var(--navy)}
+.plan .big.alert{color:var(--red)}
+.toggle-btn{padding:6px 14px;border:1px solid var(--border);border-radius:16px;background:#fff;color:var(--navy);font-weight:700;font-size:12px;cursor:pointer}
+.toggle-btn.on{background:var(--red);color:#fff;border-color:var(--red)}
+.mbtns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.mbtns button{padding:4px 12px;border:1px solid var(--border);border-radius:14px;background:#fff;font-size:11.5px;font-weight:700;color:var(--navy);cursor:pointer}
+.mbtns button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.tabs{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.tabs button{padding:7px 14px;border:1px solid var(--border);border-radius:18px;background:#fff;font-size:12px;font-weight:700;color:var(--navy);cursor:pointer}
+.tabs button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.mini-t td{padding:3px 6px;font-size:11.5px}
+.foot{font-size:12.5px;color:#889;margin-top:16px;text-align:center}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+/* marca no cabeçalho */
+.hbrand{display:flex;gap:16px;align-items:flex-start}
+.hlogo{width:46px;height:46px;border-radius:11px;flex:none;box-shadow:0 2px 10px rgba(0,0,0,.28)}
+.htag{font-size:12.5px;color:#c9ccc9;margin-top:2px;letter-spacing:.2px}
+.htag b{color:#fff;font-weight:700}
+.side-mark{width:30px;height:30px;border-radius:8px;flex:none}
+.hacoes{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.side-par{padding:4px 11px 12px;display:flex;flex-direction:column;gap:8px}
+.side-par label{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:11.5px;color:#a8b0ba;white-space:nowrap}
+.side-par input{width:72px;padding:5px 7px;border-radius:7px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.07);color:#fff;font-size:12px;font-weight:700;text-align:center;font-family:inherit}
+.side-par input:focus{outline:none;border-color:var(--red);background:rgba(255,255,255,.12)}
+.side-par input[readonly]{opacity:.55;cursor:not-allowed}
+.shell.mini .side-par{display:none}
+.ctrl{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:#fff;border:1px solid var(--border);border-left:4px solid var(--navy);border-radius:12px;padding:12px 16px;margin:14px 0 4px;box-shadow:0 1px 2px rgba(16,20,26,.04)}
+.ctrl-l{font-size:11.5px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:.6px}
+.ctrl input{padding:7px 12px;border:1px solid var(--border);border-radius:9px;font-size:13.5px;font-weight:700;color:var(--navy);font-family:inherit;background:var(--grey)}
+.ctrl input:focus{outline:none;border-color:var(--navy)}
+.ctrl-h{font-size:11.5px;color:#8a919b}
+@media(max-width:900px){
+  .shell,.shell.mini{grid-template-columns:1fr}
+  aside#side{position:sticky;top:0;height:auto;z-index:50;box-shadow:0 2px 12px rgba(0,0,0,.25)}
+  .side-top{padding:10px 14px}
+  #btnSide{display:none}
+  aside#side nav{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:6px;padding:8px 10px}
+  aside#side nav button{width:auto;flex:0 0 auto;padding:8px 13px;font-size:12px;border-radius:20px;background:rgba(255,255,255,.07)}
+  aside#side nav button.on{box-shadow:none;background:var(--red)}
+  aside#side nav button i{display:none}
+  .side-grp{display:none}
+  .side-par{flex-direction:row;flex-wrap:wrap;gap:6px;padding:0 10px 10px}
+  .side-par label{font-size:11.5px;gap:5px}
+  .side-par input{width:60px;padding:4px 5px;font-size:11.5px}
+  header{padding:14px 16px;flex-direction:column;align-items:flex-start;gap:10px}
+  header h1{font-size:19px}
+  .hlogo{width:38px;height:38px}
+  .htag,.sub{font-size:11.5px}
+  .wrap{padding:0 12px}
+  .grid2{grid-template-columns:1fr}
+  .bootwarn{position:fixed;right:14px;bottom:14px;z-index:999;max-width:320px;background:#FDE7E9;border:1px solid #F3B9C2;color:#8B0B1C;border-radius:9px;padding:10px 13px;font-size:12.5px;font-weight:600;box-shadow:0 6px 18px rgba(0,0,0,.12)}
+.execbar{grid-template-columns:1fr;gap:14px}
+  .grp-cards{grid-template-columns:repeat(3,1fr);gap:7px}
+  .ex{padding:12px}.ex .v{font-size:22px}.ex .l{font-size:11.5px}
+  .kpis{grid-template-columns:repeat(2,1fr);gap:8px}
+  .kpi{padding:11px 12px;min-height:66px}.kpi .v{font-size:19px}
+  .ctrl{padding:10px 12px;gap:8px}.ctrl-h{display:none}
+  .chart-box{height:230px}
+  .card{padding:14px 12px}.card h3{font-size:12.5px}
+  table{font-size:11.5px}th,td{padding:6px 6px}
+  .scroll{max-height:420px}
+  .crumb{font-size:11.5px;padding:10px 0 2px}
+}
+@media(max-width:520px){
+  .execbar,.kpis{grid-template-columns:1fr}
+  .grp-cards{grid-template-columns:repeat(3,1fr)}
+  .ex .v{font-size:20px}.ex .l{font-size:11.5px}
+  .ex .v{font-size:26px}
+}
+.segbar{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 6px}
+.segbar button{padding:7px 15px;border:1px solid var(--border);border-radius:18px;background:var(--grey);font-size:12px;font-weight:700;color:#667;cursor:pointer;font-family:inherit}
+.segbar button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.cmp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+.cmp-v{font-size:28px;font-weight:800;color:var(--navy);letter-spacing:-.5px}
+.cmp-l{font-size:11.5px;color:#8a919b;text-transform:uppercase;letter-spacing:.4px;margin-top:2px}
+.cmp-d{font-size:12px;font-weight:700;margin-top:4px}
+.cmp-nota{background:var(--grey);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:12.5px;color:#445}
+/* ===== SHELL + MENU LATERAL ===== */
+.shell{display:grid;grid-template-columns:262px 1fr;align-items:start}
+.shell.mini{grid-template-columns:66px 1fr}
+aside#side{position:sticky;top:0;height:100vh;background:var(--navy);display:flex;flex-direction:column;overflow:hidden;transition:all .25s ease}
+.side-top{display:flex;align-items:center;gap:10px;padding:16px 14px 12px;border-bottom:1px solid rgba(255,255,255,.08)}
+.side-logo{color:#fff;font-weight:800;font-size:14px;letter-spacing:2.4px;white-space:nowrap;flex:1}
+#btnSide{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff;border-radius:8px;width:26px;height:26px;cursor:pointer;font-size:14px;font-weight:700;line-height:1;flex:none}
+#btnSide:hover{background:var(--red);border-color:var(--red)}
+aside#side nav{padding:10px 10px 20px;overflow-y:auto;flex:1}
+.side-grp{color:#7d8794;font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;padding:14px 10px 6px;white-space:nowrap}
+aside#side nav button{width:100%;display:flex;align-items:center;gap:11px;background:transparent;border:none;color:#c9ced6;font-size:13px;font-weight:600;text-align:left;padding:10px 11px;border-radius:10px;cursor:pointer;transition:all .15s ease;white-space:nowrap;font-family:inherit}
+aside#side nav button i{font-style:normal;font-size:15px;width:18px;text-align:center;flex:none}
+aside#side nav button span{flex:1;overflow:hidden;text-overflow:ellipsis}
+aside#side nav button em{font-style:normal;font-size:11.5px;font-weight:800;background:rgba(255,255,255,.12);color:#fff;padding:2px 7px;border-radius:9px;min-width:20px;text-align:center}
+aside#side nav button em.hot{background:var(--red)}
+aside#side nav button:hover{background:rgba(255,255,255,.07);color:#fff}
+aside#side nav button.on{background:rgba(255,255,255,.10);color:#fff;box-shadow:inset 3px 0 0 var(--red)}
+aside#side nav button.on em{background:rgba(255,255,255,.18)}
+.shell.mini .side-logo,.shell.mini .side-grp,.shell.mini nav button span,.shell.mini nav button em{display:none}
+.shell.mini nav button{justify-content:center;padding:11px 0}
+.shell.mini .side-top{justify-content:center;padding:16px 0 10px}
+.mainarea{min-width:0}
+.crumb{font-size:11.5px;color:#8a919b;font-weight:600;padding:14px 0 2px}
+.crumb b{color:var(--navy)}
+
+/* faixa executiva (cabeçalho de KPIs) */
+.execbar{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:14px 0 6px}
+.grp-exec{min-width:0}
+.grp-t{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;font-size:11.5px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:1px;margin:0 0 8px 2px}
+.grp-dot{width:8px;height:8px;border-radius:50%;background:var(--navy);flex:none;align-self:center}
+.grp-sub{font-size:11.5px !important;font-size:11.5px;font-weight:600;color:#a3a9b0;text-transform:none;letter-spacing:0}
+.grp-exec.hou .grp-t{color:#8a919b}
+.grp-exec.hou .grp-dot{background:#b9bdc4}
+.grp-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.grp-exec.hou .ex .v{color:#55606b}
+.grp-exec.hou .ex.good .v{color:var(--green)}
+.grp-exec.hou .ex.alert .v{color:var(--red)}
+.ex{background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px 16px;box-shadow:0 1px 2px rgba(16,20,26,.04),0 6px 16px rgba(16,20,26,.05)}
+.ex .v{font-size:26px;font-weight:800;color:var(--navy);letter-spacing:-.5px;line-height:1}
+.ex .l{font-size:11.5px;font-weight:700;color:#8a919b;text-transform:uppercase;letter-spacing:.5px;margin-top:6px}
+.ex .d{font-size:11.5px;font-weight:700;margin-top:4px}
+.ex.alert .v{color:var(--red)} .ex.good .v{color:var(--green)}
+.up{color:var(--green)} .down{color:var(--red)}
+.card,.kpi,.tabs-nav button{transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}
+.chart-box canvas{transition:opacity .3s ease}
+.fresh{font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:12px;display:inline-block}
+.fresh.ok{background:rgba(255,255,255,.16);color:#fff} .fresh.warn{background:#fdf0e4;color:#b05a10} .fresh.old{background:#fde8e8;color:var(--red)}
+.btn-ghost{padding:5px 13px;border:1px solid rgba(255,255,255,.35);border-radius:12px;background:rgba(255,255,255,.1);color:#fff;cursor:pointer;font-size:11.5px;font-weight:700}
+.btn-ghost:hover{background:#fff;color:var(--navy)}
+
+@media print{
+  header .limite-box,.tabs-nav,#hidChips,.xbtn,.btn-ghost{display:none!important}
+  .page{display:none!important} #p1{display:block!important}
+  body{background:#fff} .card,.kpi,.ex{box-shadow:none;border:1px solid #ddd}
+  @page{margin:12mm}
+}
+
+/* --- tira de leitura do squad (substitui parágrafos em letra miúda) --- */
+.leitura{display:flex;flex-wrap:wrap;gap:0;margin-top:10px;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#fff}
+.lt-i{flex:1;min-width:104px;padding:9px 12px;border-right:1px solid var(--line)}
+.lt-i:last-child{border-right:none}
+.lt-v{font-size:17px;font-weight:800;letter-spacing:-.4px;line-height:1.15;white-space:nowrap}
+.lt-l{font-size:11.5px;color:#889;margin-top:2px;line-height:1.25}
+.lt-g{color:var(--green)}.lt-r{color:var(--red)}.lt-w{color:var(--orange)}
+.lt-vd{flex:1.4;min-width:150px;display:flex;align-items:center;background:var(--grey);font-size:15px}
+/* --- nota única, colapsável --- */
+@media(max-width:700px){.lt-i{min-width:88px;padding:8px 10px}.lt-v{font-size:15px}}
+
+/* ================= MOBILE ================= */
+@media(max-width:640px){
+  body{font-size:15px}
+  .mainarea{padding:12px 12px 60px}
+  /* tabela vira cartão: sem rolagem lateral */
+  .scroll{overflow:visible !important;max-height:none !important}
+  table{border:none}
+  table thead{position:absolute;left:-9999px;height:0;overflow:hidden}
+  table,table tbody,table tr,table td{display:block;width:100%}
+  table tbody tr{background:#fff;border:1px solid var(--line);border-radius:11px;margin-bottom:9px;padding:2px 0;overflow:hidden}
+  table tbody tr.job-row{background:var(--grey);margin-left:10px}
+  table td{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+    padding:9px 13px;border:none;border-bottom:1px solid #F1F2F4;font-size:14px;text-align:left !important}
+  table td:last-child{border-bottom:none}
+  table td::before{content:attr(data-l);flex:0 0 46%;font-size:12px;font-weight:700;color:#7a8189;
+    text-transform:uppercase;letter-spacing:.3px;line-height:1.3}
+  table td[data-full]::before,table td:not([data-l])::before{content:none}
+  table td[data-full]{display:block;font-size:14px}
+  table td:empty{display:none}
+  table tr.tot td{background:var(--grey)}
+  .bar-cell,.util-bar{min-width:120px}
+  /* números grandes continuam grandes, rótulos legíveis */
+  .kpis,.execbar,.grid2,.grid3,.split{grid-template-columns:1fr !important}
+  .kpi .v,.ex .v{font-size:27px}
+  .kpi .l,.ex .l{font-size:12px}
+  .ex .d{font-size:12px}
+  .grp-cards{grid-template-columns:1fr}
+    /* tira de leitura: 2 colunas em vez de 8 */
+  .leitura{flex-wrap:wrap}
+  .lt-i{flex:1 1 46%;min-width:0;border-bottom:1px solid var(--line)}
+  .lt-v{font-size:17px}.lt-l{font-size:12px}
+  .lt-vd{flex:1 1 100%;justify-content:center;padding:11px}
+  /* gráficos mais baixos e sem esmagar */
+  .chart-box{height:230px}
+  .chart-box.tall{height:300px}
+  /* toque confortável */
+  button,.fb,.tab,.xbtn,.segbar button{min-height:40px}
+  aside#side nav button{min-height:40px;font-size:13px}
+      h3{font-size:15px}
+  h3 small{display:block;font-size:12.5px;margin-top:2px;color:#7a8189}
+  .badge{font-size:11.5px;padding:3px 8px}
+  .ctrl{flex-wrap:wrap;gap:8px}
+  .ctrl select,.ctrl input{min-height:38px;font-size:14px}
+  .foot{font-size:12.5px}
+  /* nada de fonte minúscula no celular */
+  .car,.pr,.side-grp,.crumb,.cmp-l,.grp-sub,.d,.l,.sub,.htag{font-size:12px !important}
+}
+@media(max-width:400px){
+  .lt-i{flex:1 1 100%}
+  table td{flex-direction:column;gap:2px}
+  table td::before{flex:none}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="hbrand">
+    <img class="hlogo" src="data:image/png;base64,__LOGOB64__" alt="Vanguarda Martech">
+    <div>
+      <h1>Farol da Criação</h1>
+      <div class="htag"><b>Vanguarda Martech</b> · produção criativa</div>
+    </div>
+  </div>
+  <div class="hacoes">
+    <span id="freshBadge" class="fresh ok"></span>
+    <button class="btn-ghost" onclick="gerarPDF()">⤓ Imprimir / PDF</button>
+  </div>
+</header>
+<div class="shell">
+<aside id="side">
+  <div class="side-top">
+    <img class="side-mark" src="data:image/png;base64,__LOGOB64__" alt="V">
+    <span class="side-logo">FAROL</span>
+    <button id="btnSide" title="Recolher / expandir menu" aria-label="Recolher ou expandir o menu">‹</button>
+  </div>
+  <nav id="nav" aria-label="Navegação principal">
+    <div class="side-grp">Visão geral</div>
+    <button data-p="p1" class="on" aria-label="Demandas Internas"><i aria-hidden="true">☀</i><span>Demandas Internas</span><em id="bg-p1"></em></button>
+    <button data-p="p2" aria-label="Movimento do dia"><i aria-hidden="true">⟳</i><span>Movimento do dia</span><em id="bg-p2"></em></button>
+
+    <div class="side-grp">Especialidades</div>
+    <button data-p="p4" aria-label="Redação"><i aria-hidden="true">✎</i><span>Redação</span><em id="bg-p4"></em></button>
+    <button data-p="p5" aria-label="Produção de Vídeo"><i aria-hidden="true">▶</i><span>Produção de Vídeo</span><em id="bg-p5"></em></button>
+    <button data-p="p6" aria-label="Tráfego"><i aria-hidden="true">◎</i><span>Tráfego</span><em id="bg-p6"></em></button>
+
+    <div class="side-grp">Carteiras</div>
+    <button data-p="p8" aria-label="Houses e Dedicados"><i aria-hidden="true">▣</i><span>Houses · Dedicados</span><em id="bg-p8"></em></button>
+    <button data-p="p7" aria-label="Nova Era e Pátio Gourmet"><i aria-hidden="true">⌂</i><span>Nova Era &amp; Pátio</span><em id="bg-p7"></em></button>
+
+    <div class="side-grp">Análises</div>
+    <button data-p="pC" aria-label="Escopo do mês x capacidade"><i aria-hidden="true">◫</i><span>Escopo × Capacidade</span><em id="bg-pC"></em></button>
+    <button data-p="p3" aria-label="Entregas e histórico"><i aria-hidden="true">✔</i><span>Entregas &amp; histórico</span><em id="bg-p3"></em></button>
+        <button data-p="pP" aria-label="Entregas e histórico"><i aria-hidden="true">✔</i><span>Entregas &amp; histórico</span><em id="bg-p3"></em></button>
+    <button data-p="p9" aria-label="Peças avulsas"><i aria-hidden="true">✱</i><span>Peças avulsas</span><em id="bg-p9"></em></button>
+
+    <div class="side-grp">Parâmetros</div>
+    <div class="side-par">
+      <label>Limite/dia por DA <input type="number" id="limite" value="8" min="1" max="30"></label>
+      <label>Jornada (h) <input type="number" id="jornada" value="8" min="8" max="8" readonly title="8h a 100%"></label>
+      <label>Meta do dia (%) <input type="number" id="metaPct" value="80" min="10" max="100"></label>
+      <label>Fim do expediente <input type="time" id="fimExp" value="18:00"></label>
+    </div>
+  </nav>
+</aside>
+<div class="mainarea">
+<div class="wrap">
+  <div class="crumb" id="crumb"></div>
+
+  <!-- ============ PÁGINA 1: PAUTA ============ -->
+  <div class="page on" id="p1">
+    <div class="ctrl"><span class="ctrl-l">Dia da pauta</span><input type="date" id="pautaDia"><span class="ctrl-h"></span></div>
+    <div id="bootWarn" class="bootwarn" style="display:none"></div>
+    <div class="execbar" id="execbar"></div>
+
+      <div class="sec card" data-sec="tipos"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Distribuição da pauta por tipo</h3>
+      <div style="display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap">
+        <div class="chart-box" style="flex:1.1;min-width:200px"><canvas id="chTipoP"></canvas></div>
+        <div id="tipoInfo" style="flex:1;min-width:190px;max-height:280px;overflow-y:auto"></div>
+      </div>
+    </div>
+      <div class="sec card" data-sec="governanca"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Painel de Governança — squads internos</h3>
+      
+      <div id="govPanel"></div>
+    </div>
+      <div class="sec card" data-sec="refacao"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Alerta de refação recorrente <small>(clientes com 3+ peças em refação/ajuste, ou taxa acima de 30%)</small></h3>
+      <div class="scroll" style="max-height:260px"><table id="tbRef"><thead><tr>
+        <th>Cliente</th><th>Peças na pauta</th><th>Em refação/ajuste</th><th>Taxa</th><th>Alerta</th>
+      </tr></thead><tbody></tbody></table></div>
+    </div>
+      <div class="sec card" data-sec="cargaDA"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Pauta por diretor de arte <small>(clique num dia para ver a pauta daquela data · clique no nome para abrir os jobs)</small></h3>
+      <div class="mbtns" id="diasPauta"></div>
+      <div class="scroll"><table id="tbP1"><thead><tr>
+        <th style="width:24px"></th><th>DA</th><th>Alocação</th><th>No dia</th><th>Horas no dia</th><th>Saldo</th><th>Utilização</th><th>Total</th><th>Formatos na pauta</th><th>Situação</th>
+      </tr></thead><tbody></tbody></table></div>
+    </div>
+      <div class="sec card" data-sec="atrasados"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Jobs atrasados na pauta <small>(prazo anterior a hoje)</small> <span id="nAtr" class="badge b-red" style="margin-left:6px"></span></h3>
+      <div class="scroll" style="max-height:300px"><table id="tbAtr"><thead><tr>
+        <th>Cliente</th><th>Peça</th><th>Responsável</th><th>Prazo</th><th>Dias de atraso</th><th>Status</th>
+      </tr></thead><tbody></tbody></table></div>
+    </div>
+      <div class="sec card" data-sec="meta"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Meta do dia <small>(entregas realizadas × meta sobre a pauta da manhã)</small></h3>
+      <div id="metaBox"></div>
+    </div>
+      <div class="sec card" data-sec="plano"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+        <h3 style="margin-bottom:0">Plano de Gestão <small>(DAs acima do limite e redistribuição)</small></h3>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span id="planoResumo"></span><button id="btnPlano" class="toggle-btn">Ver plano</button></div>
+      </div>
+      <div class="plan" id="plano" style="display:none;margin-top:12px"></div>
+    </div>
+      <div class="sec card" data-sec="tempos"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Tempo de execução por formato — DAs internos <small>(mediana real de 01/01–17/07 · 1.869 execuções do núcleo · base das horas estimadas)</small></h3>
+      <div class="scroll" style="max-height:340px"><table id="tbTemp"><thead><tr><th>Formato</th><th>Tempo internos (mediana)</th><th>Capacidade/DA/dia (7h)</th><th>Média da agência</th><th>Amostras internos</th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- ============ PÁGINA 8: HOUSES DEDICADOS ============ -->
+  <div class="page" id="p8">
+    <div class="sec" data-sec="kpi8"><button class="xbtn" title="Ocultar seção">Ocultar</button><div class="kpis" id="kpi8"></div></div>
+    <div class="sec card" data-sec="dDed"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Distribuição da pauta por tipo <small>(houses · dedicados)</small></h3>
+      <div style="display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap">
+        <div class="chart-box" style="flex:1.1;min-width:200px"><canvas id="chDist8"></canvas></div>
+        <div id="dInfo8" style="flex:1;min-width:190px;max-height:280px;overflow-y:auto"></div>
+      </div>
+    </div>
+    <div class="sec card" data-sec="gDed"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Carga por DA dedicado <small>(clique na barra para abrir os jobs)</small></h3>
+      <div class="chart-box" style="height:340px"><canvas id="chDed"></canvas></div>
+    </div>
+    <div class="sec card" data-sec="tabDed"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Pauta dos dedicados por responsável <small>(cada DA na house do seu cliente · clique no nome para abrir os jobs)</small></h3>
+      <div class="scroll"><table id="tbDed"><thead><tr>
+        <th style="width:24px"></th><th>D.A. dedicado</th><th>Hoje</th><th>Horas hoje</th><th>Ocupação</th><th>Total pauta</th><th>Formatos</th><th>Situação</th>
+      </tr></thead><tbody></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- ============ PÁGINA 7: PAUTA HOUSE ============ -->
+  <div class="page" id="p7">
+    <div class="sec" data-sec="kpi7"><button class="xbtn" title="Ocultar seção">Ocultar</button><div class="kpis" id="kpi7"></div></div>
+    <div class="sec card" data-sec="dHouse"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Distribuição da pauta por tipo <small>(pauta das houses)</small></h3>
+      <div style="display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap">
+        <div class="chart-box" style="flex:1.1;min-width:200px"><canvas id="chDist7"></canvas></div>
+        <div id="dInfo7" style="flex:1;min-width:190px;max-height:280px;overflow-y:auto"></div>
+      </div>
+    </div>
+    <div class="sec card" data-sec="gHouse"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Carga por DA de house <small>(clique na barra para abrir os jobs)</small></h3>
+      <div class="chart-box"><canvas id="chHouse"></canvas></div>
+    </div>
+    <div class="sec card" data-sec="tabHouse"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Pauta Nova Era &amp; Pátio Gourmet por responsável <small>(clique no nome para abrir os jobs · sem redistribuição com o time interno)</small></h3>
+      <div class="scroll"><table id="tbHouse"><thead><tr>
+        <th style="width:24px"></th><th>D.A. de house</th><th>Hoje</th><th>Horas hoje</th><th>Ocupação</th><th>Total pauta</th><th>Formatos</th><th>Situação</th>
+      </tr></thead><tbody></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- ============ PÁGINA 2: MOVIMENTO ============ -->
+  <div class="page" id="p2">
+    <div class="sec" data-sec="kpi2"><button class="xbtn" title="Ocultar seção">Ocultar</button><div class="kpis" id="kpi2"></div></div>
+  <div class="sec card" data-sec="comparativo"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+    <h3>Comparativo do dia <small>(carga inicial × entregas × remanejamentos)</small></h3>
+    <div id="cmpDia"></div>
+  </div>
+      <div class="sec card" data-sec="movTab"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Detalhe do movimento (<span id="nMov"></span>)</h3>
+      <div class="tabs" id="movTabs">
+        <button data-t="ent" class="on">✔ Concluídos</button>
+        <button data-t="pen">⏳ Pendentes</button>
+        <button data-t="nov">➕ Novas</button>
+      </div>
+      <div class="scroll" style="max-height:420px"><table id="tbMov"><thead id="movHead"></thead><tbody></tbody></table></div>
+    </div>
+      <div class="sec card" data-sec="movDA"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Jobs concluídos × pendentes por DA <small>(desde a extração da manhã · atualiza a cada nova extração)</small></h3>
+      <div class="chart-box" style="height:360px"><canvas id="chMovDA"></canvas></div>
+    </div>
+      <div class="sec card" data-sec="resultado"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Resultado do dia — jobs entregues × horas trabalhadas <small>(horas do relatório de atividades do sistema)</small></h3>
+      <div class="kpis" id="kpiRes" style="margin-bottom:10px"></div>
+      <div class="scroll" style="max-height:320px"><table id="tbRes"><thead><tr>
+        <th>Profissional</th><th>Jobs concluídos</th><th>Horas registradas</th><th>Média por job</th><th>Jobs por hora</th>
+      </tr></thead><tbody></tbody></table></div>
+    </div>
+      <div class="sec grid2" data-sec="balanco" style="position:relative"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <div class="card"><h3>Balanço do dia</h3><div class="chart-box"><canvas id="chBal"></canvas></div></div>
+      <div class="card"><h3>Novas demandas por cliente</h3><div id="novasCli" style="max-height:280px;overflow-y:auto"></div></div>
+    </div>
+  </div>
+
+  <!-- ============ PÁGINA 3: ENTREGAS & HISTÓRICO ============ -->
+  <div class="page" id="p3">
+    <div class="ctrl"><span class="ctrl-l">Dia em análise</span><input type="date" id="diaSel"><span class="ctrl-h">troca o dia das entregas e do histórico</span></div>
+    <div class="sec card" data-sec="compara"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Comparativo de períodos <small>(produção entregue)</small></h3>
+      <div class="segbar" id="cmpTabs">
+        <button data-c="sem" class="on">Semana × semana</button>
+        <button data-c="mes">Mês × mês</button>
+        <button data-c="ano">Ano × ano</button>
+      </div>
+      <div id="cmpResumo" style="margin:12px 0"></div>
+      <div class="chart-box" style="height:250px"><canvas id="chCmp"></canvas></div>
+      <div class="scroll" style="max-height:260px;margin-top:12px"><table id="tbCmp"><thead><tr><th>Período</th><th>Peças</th><th>Horas</th><th>Peças/hora</th><th>Variação</th></tr></thead><tbody></tbody></table></div>
+    </div>
+    <div class="sec" data-sec="kpi3"><button class="xbtn" title="Ocultar seção">Ocultar</button><div class="kpis" id="kpi3"></div></div>
+    <div class="sec card" data-sec="semana"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Jobs por dia da semana <small>(semana atual × média histórica — mostra qual dia concentra mais jobs)</small></h3>
+      <div class="chart-box"><canvas id="chSem"></canvas></div>
+    </div>
+    <div class="sec card" data-sec="tendencia"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Tendência de produtividade por semana <small>(peças por hora registrada — mostra saturação ou aceleração da equipe)</small></h3>
+      <div class="chart-box"><canvas id="chTend"></canvas></div>
+    </div>
+    <div class="sec card" data-sec="diario"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Peças trabalhadas por dia</h3>
+      <div class="mbtns" id="mBtns"></div>
+      <div class="chart-box"><canvas id="chDias"></canvas></div>
+    </div>
+    <div class="sec card" data-sec="fezHoje"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>O que cada DA fez hoje <small>(clique no nome para abrir os jobs)</small></h3>
+      <div class="scroll"><table id="tbP3"><thead><tr>
+        <th style="width:24px"></th><th>DA</th><th>Alocação</th><th>Peças</th><th>Atividades</th><th>Horas</th><th>Retrabalho</th><th>Principais formatos</th>
+      </tr></thead><tbody></tbody></table></div>
+    </div>
+    <div class="sec card" data-sec="mensal"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Histórico mensal por DA <small>(peças no mês · passe o mouse para ver horas)</small></h3>
+      <div class="scroll" style="max-height:460px"><table id="tbMes"><thead></thead><tbody></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- ============ PÁGINA 4: REDAÇÃO ============ -->
+  <div class="page" id="p4">
+    <div class="sec" data-sec="kpi4"><button class="xbtn" title="Ocultar seção">Ocultar</button><div class="kpis" id="kpi4"></div></div>
+    <div class="sec card" data-sec="dRed"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Distribuição da pauta por tipo <small>(pauta de redação)</small></h3>
+      <div style="display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap">
+        <div class="chart-box" style="flex:1.1;min-width:200px"><canvas id="chDist4"></canvas></div>
+        <div id="dInfo4" style="flex:1;min-width:190px;max-height:280px;overflow-y:auto"></div>
+      </div>
+    </div>
+    <div class="sec card" data-sec="gRed"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Carga por redator(a) <small>(clique na barra para abrir os jobs na tabela abaixo)</small></h3>
+      <div class="chart-box"><canvas id="chRed"></canvas></div>
+    </div>
+    <div class="sec card" data-sec="semRed"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Jobs por dia da semana <small>(redação — semana atual × média histórica)</small></h3>
+      <div class="chart-box"><canvas id="chSemRed"></canvas></div>
+    </div>
+    <div class="sec card" data-sec="tmpRed"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Tempo médio por formato <small>(redação — mediana do tempo total por peça, jan–jul)</small></h3>
+      <div id="tmpRed" class="scroll" style="max-height:360px"></div>
+    </div>
+    <div class="sec card" data-sec="govRed"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Capacidade de entrega · Redação <small>(hora por job × capacidade restante do dia)</small></h3>
+      
+      <div id="govRed"></div>
+    </div>
+    <div class="sec card" data-sec="tabRed"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Pauta de redação por responsável <small>(clique no nome para abrir os jobs)</small></h3>
+      <div class="scroll"><table id="tbRed"><thead><tr>
+        <th style="width:24px"></th><th>Redator(a)</th><th>Hoje</th><th>Horas hoje</th><th>Ocupação</th><th>Total pauta</th><th>Formatos</th><th>Situação</th>
+      </tr></thead><tbody></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- ============ PÁGINA 5: VÍDEO ============ -->
+  <div class="page" id="p5">
+    <div class="sec" data-sec="kpi5"><button class="xbtn" title="Ocultar seção">Ocultar</button><div class="kpis" id="kpi5"></div></div>
+    <div class="sec card" data-sec="dVid"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Distribuição da pauta por tipo <small>(pauta de vídeo)</small></h3>
+      <div style="display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap">
+        <div class="chart-box" style="flex:1.1;min-width:200px"><canvas id="chDist5"></canvas></div>
+        <div id="dInfo5" style="flex:1;min-width:190px;max-height:280px;overflow-y:auto"></div>
+      </div>
+    </div>
+    <div class="sec card" data-sec="gVid"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Carga por editor(a) <small>(clique na barra para abrir os jobs na tabela abaixo)</small></h3>
+      <div class="chart-box"><canvas id="chVid"></canvas></div>
+    </div>
+    <div class="sec card" data-sec="semVid"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Jobs por dia da semana <small>(vídeo — semana atual × média histórica)</small></h3>
+      <div class="chart-box"><canvas id="chSemVid"></canvas></div>
+    </div>
+    <div class="sec card" data-sec="tmpVid"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Tempo médio por formato <small>(vídeo — mediana do tempo total por peça, jan–jul)</small></h3>
+      <div id="tmpVid" class="scroll" style="max-height:360px"></div>
+    </div>
+    <div class="sec card" data-sec="tabVid"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Pauta de vídeo por responsável <small>(clique no nome para abrir os jobs)</small></h3>
+      <div class="scroll"><table id="tbVid"><thead><tr>
+        <th style="width:24px"></th><th>Editor(a)</th><th>Hoje</th><th>Horas hoje</th><th>Ocupação</th><th>Total pauta</th><th>Formatos</th><th>Situação</th>
+      </tr></thead><tbody></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- ============ PÁGINA 6: TRÁFEGO ============ -->
+
+  <div class="page" id="pP">
+    <div class="sec" data-sec="prodTop"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <div class="ctrl">
+        <span class="ctrl-l">PERÍODO</span>
+        <div class="segbar" id="prodTabs">
+          <button class="on" data-t="sem">Semana</button>
+          <button data-t="mes">Mês</button>
+        </div>
+        <select id="prodPer" class="ctrl-h"></select>
+        <span class="ctrl-l" style="margin-left:8px">MOSTRAR</span>
+        <div class="segbar" id="prodGrp">
+          <button class="on" data-g="">Todos</button>
+          <button data-g="Interno">Interno</button>
+          <button data-g="Mídia Off">Mídia Off</button>
+          <button data-g="Redação">Redação</button>
+          <button data-g="Vídeo">Vídeo</button>
+          <button data-g="Dedicado">Dedicados</button>
+        </div>
+      </div>
+      <div class="kpis" id="kpiP"></div>
+    </div>
+    <div class="sec card" data-sec="prodTab"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Tempo em play × produtividade por profissional</h3>
+      <div class="scroll"><table id="tbProd"><thead><tr>
+        <th>Profissional</th><th>Frente</th><th title="Dias com apontamento no período">Dias</th>
+        <th title="Horas apontadas no iClips (só etapa produtiva e retrabalho)">Horas em play</th>
+        <th title="Peças distintas entregues">Peças</th>
+        <th title="Horas em play ÷ peças entregues">Min por peça</th>
+        <th title="Tempo esperado das peças entregues, pela mediana do formato no grupo da pessoa">Esperado</th>
+        <th title="Esperado ÷ real. 100% = no ritmo do formato. Acima = mais rápido.">Ritmo</th>
+        <th title="Parte das horas gasta em ajuste e refação">Retrabalho</th>
+        <th title="Horas apontadas ÷ jornada dos dias trabalhados. Abaixo de 60% indica subapontamento.">Aderência</th>
+        <th>Sinal</th>
+      </tr></thead><tbody></tbody></table></div>
+      <div class="cap" id="prodNota"></div>
+    </div>
+  </div>
+  <div class="page" id="p6">
+    <div class="sec" data-sec="kpi6"><button class="xbtn" title="Ocultar seção">Ocultar</button><div class="kpis" id="kpi6"></div></div>
+    <div class="sec card" data-sec="trafMes"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Demanda do tráfego por dia do mês <small>(vermelho = atrasada · laranja = hoje)</small></h3>
+      <div class="chart-box"><canvas id="chTraf"></canvas></div>
+    </div>
+    <div class="sec grid2" data-sec="trafSem" style="position:relative"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <div class="card"><h3>Carga por semana <small>(horas estimadas pelos tempos reais por formato)</small></h3>
+        <div class="scroll" style="max-height:280px"><table id="tbSem6"><thead><tr><th>Semana</th><th>Peças</th><th title="Soma do tempo de execução das peças ainda em aberto (mediana real por formato)">Horas de execução</th><th>Leitura</th></tr></thead><tbody></tbody></table></div></div>
+      <div class="card"><h3>Origem do volume</h3><div id="trafInfo" style="max-height:280px;overflow-y:auto"></div></div>
+    </div>
+    <div class="sec card" data-sec="trafRisco"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Riscos de gargalo <small>(prazo em até 2 dias e peça ainda em texto/refação)</small></h3>
+      <div class="scroll" style="max-height:300px"><table id="tbRisco"><thead><tr><th>Cliente</th><th>Peça</th><th>Formato</th><th>Status atual</th><th>Prazo</th><th>Risco</th></tr></thead><tbody></tbody></table></div>
+    </div>
+    <div class="sec card" data-sec="trafDet"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Pauta completa do tráfego (<span id="nTraf"></span> peças · ordenada por prazo)</h3>
+      <div class="scroll"><table id="tbTraf"><thead><tr><th>Prazo</th><th>Cliente</th><th>Peça</th><th>Formato</th><th>Status</th><th>~Tempo</th><th>Situação</th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- ============ PÁGINA 9: PEÇAS AVULSAS (FORA DE ESCOPO) ============ -->
+  <div class="page" id="p9">
+    <div class="sec" data-sec="kpi9"><button class="xbtn" title="Ocultar seção">Ocultar</button><div class="kpis" id="kpi9"></div></div>
+    <div class="sec card" data-sec="avulNota"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Como lemos "fora de escopo"</h3>
+      <p style="font-size:12.5px;color:#556;margin:4px 0 0">São as peças marcadas como <b>"Avulso"</b> (Card/Post Avulso etc.) — demanda extra que não estava no pacote mensal contratado. Base: relatório de atividades realizadas do mês.</p>
+    </div>
+    <div class="sec card" data-sec="avulGraf"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Clientes que mais pediram fora do escopo <small>(peças avulsas no mês)</small></h3>
+      <div class="chart-box"><canvas id="chAvul"></canvas></div>
+    </div>
+    <div class="sec card" data-sec="avulRank"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Ranking por cliente</h3>
+      <div class="scroll" style="max-height:360px"><table id="tbAvulR"><thead><tr><th style="width:34px">#</th><th>Cliente</th><th>Avulsas</th><th>Total do mês</th><th>% avulso</th></tr></thead><tbody></tbody></table></div>
+    </div>
+    <div class="sec card" data-sec="avulLista"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Relação das peças avulsas do mês (<span id="nAvul"></span>)</h3>
+      <div class="scroll" style="max-height:460px"><table id="tbAvul"><thead><tr><th style="width:90px">Data</th><th>Cliente</th><th>Peça</th><th>Formato</th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- ============ ESCOPO DO MÊS × CAPACIDADE ============ -->
+  <div class="page" id="pC">
+    <div class="ctrl"><span class="ctrl-l">Mês de referência</span><input type="month" id="mesCap"><span class="ctrl-h">compara o escopo previsto do mês com a capacidade produtiva da equipe</span></div>
+    <div class="sec" data-sec="kpiC"><button class="xbtn" title="Ocultar seção">Ocultar</button><div class="kpis" id="kpiC"></div></div>
+    <div class="sec card" data-sec="capNota"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Como ler esta tela</h3>
+      <p style="font-size:12.5px;color:#556;margin:4px 0 0"><b>Escopo do mês</b> = horas estimadas de tudo que foi produzido + o que ainda está na pauta no mês. <b>Capacidade</b> = pessoas ativas × 8h × dias úteis do mês. O <b>comprometimento</b> mostra quanto do mês já está tomado — acima de 100% significa que o escopo não cabe na capacidade instalada. As <b>pessoas</b> consideradas são o quadro ativo (com registro nos últimos 30 dias), por isso <b>meses futuros</b> já aparecem com a capacidade real da equipe, mesmo que a pauta ainda esteja sendo montada.</p>
+    </div>
+    <div class="sec card" data-sec="capGraf"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Escopo × capacidade por grupo <small>(horas)</small></h3>
+      <div class="chart-box"><canvas id="chCap"></canvas></div>
+    </div>
+    <div class="sec card" data-sec="capTab"><button class="xbtn" title="Ocultar seção">Ocultar</button>
+      <h3>Detalhe por grupo</h3>
+      <div class="scroll"><table id="tbCap"><thead><tr><th>Grupo</th><th>Pessoas</th><th>Capacidade (h)</th><th>Produzido (h)</th><th>Em pauta (h)</th><th>Escopo total (h)</th><th>Comprometido</th><th>Situação</th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </div>
+
+  <div class="foot">Farol da Criação · peças com mais de um DA contam para cada um · seções ocultas ficam guardadas neste computador · Vanguarda Martech</div>
+</div>
+</div><!-- /mainarea -->
+</div><!-- /shell -->
+
+<script>
+const PAUTA = __PAUTA__;      // pauta atual (última extração)
+const MOVP  = __MOVP__;       // pauta da manhã com flag entregue
+const NOVAS = __NOVAS__;      // novas desde a manhã
+const ACT   = __ACT__;        // atividades realizadas (últimos 20 dias)
+const DAS   = __DAS__;
+const AGG   = __AGG__;        // por dia×DA: p,a,m,r
+const MES   = __MES__;
+const PROD = __PROD__;
+const AUSENTES = __AUSENTES__;   // pessoas fora hoje: não entram na capacidade
+const ALOC  = __ALOC__;
+const SHORT = __SHORT__;
+const TRAF = __TRAF__;
+const EFIC=1.0;   // 100% da jornada (8h) — capacidade plena para todos
+const FRENTE_DA={'Arthur Andre Souza Santos':'Inbound','Alexandre Ramos dos Santos':'Inbound',
+ 'Gustavo da Silva Rangel Aragonez':'Social','Guilherme Gonçalves Ferreira':'Social','Thayssa Polyanna Souza Lira':'Social','Lucas Reis Chaves':'Social',
+ 'Samuel Freitas de Souza':'OFF','Francisca Samantha Salgado de Araújo':'OFF','Johnes Saboia Andrade':'OFF',
+ 'Antônio Sérgio Rocha Braga':'OFF'};
+const FRENTE_COR={'Inbound':'blue','Social':'red','OFF':'orange'};
+const INBOUND_DAS=['Arthur Andre Souza Santos','Alexandre Ramos dos Santos'];
+const HOUSE_DAS=['Beatriz Karina Ferreira Costa','Francisco Alex de Souza Costa','Gabriel Torres Miranda','Lucas Giatti Meirelles','Luiz Guilherme Soares dos Santos','Dickss Aldo Franco de Souza','Rodrigo Gama de Oliveira','Wallace Santos Leal'];
+const PAUTA_INT=PAUTA.filter(p=>!p.das.some(d=>HOUSE_DAS.includes(d)));
+const PAUTA_HOUSE=__PAUTAH__; // pauta dos clientes house + peças com DAs de house
+const DED_DAS=Object.keys(ALOC).filter(k=>ALOC[k].g==='Dedicado');
+const PAUTA_DED=PAUTA_INT.filter(p=>p.das.some(d=>DED_DAS.includes(d)));
+const PAUTA_CORE=PAUTA_INT.filter(p=>!p.das.some(d=>DED_DAS.includes(d)));
+const REDIST_POOL=['Arthur Andre Souza Santos','Alexandre Ramos dos Santos','Gustavo da Silva Rangel Aragonez','Guilherme Gonçalves Ferreira','Thayssa Polyanna Souza Lira','Lucas Reis Chaves'];
+const REDACAO = __RED__;
+const VIDEO = __VID__;
+const D1 = __D1__;   // foto do dia anterior (rollover)
+const AVULSO = __AVULSO__;   // peças avulsas (fora de escopo) do mês
+const TEAM_RED = __TEAMRED__;
+const TEAM_VID = __TEAMVID__;
+const TEMPOS = __TEMPOS__;
+const TEMPOS_INT = __TEMPOSINT__; // mediana dos 4 DAs internos // {FORMATO:[min típicos, amostras]}
+const TEMPOS_RED = __TEMPOSRED__; // tempo total por peça (formato) — equipe de redação
+const TEMPOS_VID = __TEMPOSVID__; // tempo total por peça (formato) — equipe de vídeo/edição
+const SUPSET = new Set(__SUP__);  // supervisores (produção reduzida)
+const SUPF = 1.0;                 // gestores também em 100% (Redação, Vídeo, Tráfego)
+const capMembro=m=>Math.round(JOR()*EFIC*(SUPSET.has(m)?SUPF:1));
+const ttmin=(tt,p)=>((tt&&tt[p.fmt])||(tt&&tt.__def__)||[45])[0];
+const REF   = '__REF__';
+
+const NAVY='#161D25', GRAF='#33373D', RED='#E11121', ORANGE='#ED7D31', GREEN='#2E7D32', GREY='#c6c9cd';
+const PAL=[RED,NAVY,'#6E7681',ORANGE,'#C23335','#70AD47','#B0B6BD','#E8A0A5'];
+const $=id=>document.getElementById(id);
+const uniq=a=>[...new Set(a)];
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const cnt=a=>a.reduce((m,v)=>(m[v]=(m[v]||0)+1,m),{});
+const fmtD=d=>d?d.split('-').reverse().join('/'):'—';
+const situ=p=>!p?'(sem prazo)':p<REF?'Atrasada':p===REF?'Vence hoje':'No prazo';
+const isRetrab=s=>/refa|ajuste/i.test(s);
+const hor=m=>{const h=Math.floor(m/60),mm=Math.round(m%60);return h?`${h}h${String(mm).padStart(2,'0')}`:`${mm}min`;};
+const MIN_P=new Set(['de','da','do','das','dos','e']);
+const titulo=s=>String(s||'').toLowerCase().split(/\s+/).map(w=>MIN_P.has(w)?w:(w.charAt(0).toUpperCase()+w.slice(1))).join(' ');
+const sn=d=>titulo(SHORT[d]||d);
+const aloc=d=>ALOC[d]||{g:'Interno',f:''};
+const alocTxt=d=>{const a=aloc(d);return a.f?`${a.g} · ${a.f}`:a.g;};
+const pct=(a,b)=>b?100*a/b:0;
+const LIM=()=>Math.max(1,+$('limite').value||8);
+const localISO=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const AGORA=new Date();
+const HOJE_ISO=localISO(AGORA);
+function horasRestantesMin(){
+  const fim=($('fimExp')&&$('fimExp').value)||'18:00';
+  const [fh,fm]=fim.split(':').map(Number);
+  const now=new Date();                       // hora local AO VIVO (não congela na abertura)
+  if(REF!==localISO(now)) return JOR()*EFIC;   // dia passado/futuro: jornada cheia
+  const restante=(fh*60+fm)-(now.getHours()*60+now.getMinutes());
+  return Math.max(0, Math.min(JOR()*EFIC, restante));
+}
+const JOR=()=>Math.max(1,+$('jornada').value||8)*60;
+const tmin=p=>(TEMPOS[p.fmt]||[60])[0];
+const tminD=(m,p)=>(REDIST_POOL.includes(m)&&TEMPOS_INT[p.fmt])?TEMPOS_INT[p.fmt][0]:tmin(p);
+const kpi=(l,v,cls)=>`<div class="kpi ${cls||''}"><div class="v">${v}</div><div class="l">${l}</div></div>`;
+const mini=(titulo,obj)=>{const ks=Object.keys(obj).sort((a,b)=>obj[b]-obj[a]);const tot=ks.reduce((s,k)=>s+obj[k],0)||1;
+  return `<div style="font-size:11.5px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.4px;margin:4px 0">${titulo}</div><table class="mini-t">`+
+  ks.map(k=>`<tr><td>${esc(k)}</td><td style="text-align:right"><b>${obj[k]}</b></td><td style="color:#778;text-align:right">${(100*obj[k]/tot).toFixed(0)}%</td></tr>`).join('')+`</table>`;};
+
+// ---------- seções ocultáveis ----------
+const SEC_LABELS={kpi1:'Indicadores (pauta)',meta:'Meta do dia',plano:'Plano de Gestão',atrasados:'Jobs atrasados',tipos:'Distribuição por tipo',refacao:'Alerta de refação',governanca:'Painel de governança',kpi8:'Indicadores (dedicados)',dDed:'Distribuição (dedicados)',gDed:'Gráfico dedicados',tabDed:'Pauta dos dedicados',kpi7:'Indicadores (NE/PG)',dHouse:'Distribuição (house)',gHouse:'Gráfico house',tabHouse:'Pauta NE/PG',cargaDA:'Pauta por DA',tempos:'Tempo por formato',
+  kpi2:'Indicadores (movimento)',comparativo:'Comparativo do dia',resultado:'Resultado do dia',movDA:'Concluídos × pendentes',balanco:'Balanço / novas',movTab:'Detalhe do movimento',
+  kpi3:'Indicadores (entregas)',kpi4:'Indicadores (redação)',dRed:'Distribuição (redação)',gRed:'Gráfico redação',semRed:'Jobs/dia — redação',tmpRed:'Tempo/formato (redação)',tabRed:'Pauta de redação',kpi5:'Indicadores (vídeo)',dVid:'Distribuição (vídeo)',gVid:'Gráfico vídeo',semVid:'Jobs/dia — vídeo',tmpVid:'Tempo/formato (vídeo)',tabVid:'Pauta de vídeo',kpi6:'Indicadores (tráfego)',trafMes:'Demanda mensal',trafSem:'Carga por semana',trafRisco:'Riscos de gargalo',trafDet:'Pauta do tráfego',compara:'Comparativo de períodos',semana:'Jobs por dia da semana',tendencia:'Tendência semanal',diario:'Peças por dia',fezHoje:'O que cada DA fez',mensal:'Histórico mensal',kpiC:'Indicadores (capacidade)',capNota:'Como ler',capGraf:'Escopo × capacidade',capTab:'Detalhe por grupo',kpi9:'Indicadores (avulsas)',avulNota:'Como lemos fora de escopo',avulGraf:'Gráfico avulsas',avulRank:'Ranking por cliente',avulLista:'Relação das peças avulsas'};
+// Padrão enxuto: seções de CONSULTA começam recolhidas (abra quando precisar).
+// A tela do dia mostra só o essencial: KPIs, pauta por DA e jobs atrasados.
+const HID_PADRAO=['meta','gov','plano','tipos','tempos','temposInt','tendencia','mensal','diario','trafMes','trafSem','semana'];
+let HID=new Set(JSON.parse(localStorage.getItem('farolHid3')||JSON.stringify(HID_PADRAO)));
+function applyHid(){
+  document.querySelectorAll('.sec').forEach(s=>{
+    const id=s.dataset.sec, hid=HID.has(id);
+    s.classList.toggle('clps',hid);
+    let bar=s.querySelector(':scope > .clpsbar');
+    if(hid && !bar){ bar=document.createElement('div'); bar.className='clpsbar';
+      bar.innerHTML=`<span>${SEC_LABELS[id]||id} · seção oculta</span><button>Mostrar</button>`; s.appendChild(bar); }
+    if(!hid && bar) bar.remove();
+  });
+  localStorage.setItem('farolHid3', JSON.stringify([...HID]));
+}
+document.addEventListener('click',e=>{
+  const x=e.target.closest('.xbtn');
+  if(x){ HID.add(x.closest('.sec').dataset.sec); applyHid(); return; }
+  const b=e.target.closest('.clpsbar button');
+  if(b){ HID.delete(b.closest('.sec').dataset.sec); applyHid(); resizeAll(); }
+});
+
+// ---------- navegação de abas ----------
+const inited={p1:false,p2:false,p3:false,p7:false};
+const CRUMBS={p1:['Visão geral','Demandas Internas'],p2:['Visão geral','Movimento do dia'],
+  p4:['Especialidades','Redação'],p5:['Especialidades','Produção de Vídeo'],p6:['Especialidades','Tráfego'],
+  p8:['Carteiras','Houses · Dedicados'],p7:['Carteiras','Nova Era & Pátio Gourmet'],
+  pC:['Análises','Escopo × Capacidade'],p3:['Análises','Entregas & histórico'],p9:['Análises','Peças avulsas']};
+function showTab(p){
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.p===p));
+  document.querySelectorAll('.page').forEach(pg=>pg.classList.toggle('on',pg.id===p));
+  const c=CRUMBS[p]||['',''];
+  const cr=document.getElementById('crumb'); if(cr) cr.innerHTML=`Farol da Criação &nbsp;›&nbsp; ${c[0]} &nbsp;›&nbsp; <b>${c[1]}</b>`;
+  if(!inited[p]){ INIT[p](); inited[p]=true; }
+  resizeAll();
+}
+$('nav').addEventListener('click',e=>{const b=e.target.closest('button'); if(b) showTab(b.dataset.p);});
+// recolher / expandir o menu lateral (lembra a escolha)
+(()=>{const sh=document.querySelector('.shell'), bt=document.getElementById('btnSide');
+  const apply=on=>{sh.classList.toggle('mini',on); bt.textContent=on?'›':'‹'; setTimeout(resizeAll,260);};
+  apply(localStorage.getItem('sideMini')==='1');
+  bt.addEventListener('click',()=>{const on=!sh.classList.contains('mini'); localStorage.setItem('sideMini',on?'1':'0'); apply(on);});
+})();
+// badges do menu: quantidade que vence hoje em cada frente
+function sideBadges(){
+  // Badge = o que está EM ABERTO hoje (o que exige ação). Vermelho só quando há atraso.
+  const ab=a=>a.filter(p=>p.prazo===REF).length;
+  const atr=a=>a.filter(p=>p.prazo&&p.prazo<REF).length;
+  const set=(id,n,quente)=>{const el=document.getElementById('bg-'+id); if(!el)return;
+    el.textContent=n||''; el.className=(n&&quente)?'hot':''; el.title=quente?'há peça atrasada':'em aberto hoje';};
+  const P1=(typeof PAUTA_CORE!=='undefined')?PAUTA_CORE:PAUTA;
+  const PD=(typeof PAUTA_DED!=='undefined')?PAUTA_DED:[];
+  const PH=(typeof PAUTA_HOUSE!=='undefined')?PAUTA_HOUSE:[];
+  set('p1',ab(P1),atr(P1)>0);
+  set('p2',(typeof NOVAS!=='undefined')?NOVAS.length:0,false);
+  set('p4',ab(REDACAO),atr(REDACAO)>0);
+  set('p5',ab(VIDEO),atr(VIDEO)>0);
+  set('p6',(typeof TRAF!=='undefined')?TRAF.filter(p=>p.prazo&&p.prazo<REF).length||TRAF.length:0,(typeof TRAF!=='undefined')&&TRAF.some(p=>p.prazo&&p.prazo<REF));
+  set('p8',ab(PD),atr(PD)>0);
+  set('p7',ab(PH),atr(PH)>0);
+  set('p9',(typeof AVULSO!=='undefined'&&AVULSO.total)?AVULSO.total:0,false);
+}
+const CHARTS=[];
+function resizeAll(){ CHARTS.forEach(c=>{try{c.resize();}catch(e){}}); }
+Chart.defaults.font.family="'Inter','Segoe UI',system-ui,Arial,sans-serif";
+Chart.defaults.color='#6b7280';
+try{ Chart.defaults.borderColor='rgba(22,29,37,.06)';
+  Chart.defaults.plugins.tooltip.cornerRadius=8;
+  Chart.defaults.plugins.tooltip.padding=10;
+  Chart.defaults.plugins.tooltip.backgroundColor='rgba(22,29,37,.92)';
+}catch(e){}
+const BUILDTS="__BUILDTS__";
+function freshness(){
+  const el=document.getElementById('freshBadge'); if(!el) return;
+  let b=new Date(BUILDTS); if(isNaN(b)) b=new Date();
+  const min=Math.max(0,Math.round((new Date()-b)/60000));
+  let cls='ok'; if(min>180)cls='warn'; if(min>480)cls='old';
+  el.className='fresh '+cls;
+  el.textContent='● atualizado '+b.toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+(min>180?` · há ${Math.floor(min/60)}h`:'');
+}
+function gerarPDF(){ if(typeof showTab==='function')showTab('p1'); setTimeout(()=>window.print(),120); }
+// concluídas × pauta da manhã, por escopo (100% = pauta daquele escopo)
+function movStats(pred){
+  const arr=(typeof MOVP!=='undefined'?MOVP:[]).filter(pred||(()=>true));
+  const manha=arr.length, feitas=arr.filter(p=>p.entregue).length;
+  return {manha,feitas,pct:Math.round(100*feitas/Math.max(1,manha))};
+}
+const isHouseDAp=p=>p.das.some(d=>HOUSE_DAS.includes(d));
+const isDedP=p=>p.das.some(d=>DED_DAS.includes(d));
+const isNucleoP=p=>!isHouseDAp(p)&&!isDedP(p);
+function renderExecbar(){
+  const el=document.getElementById('execbar'); if(!el) return;
+  // MESMOS FILTROS DAS ABAS:
+  //   PAUTA_CORE  = pauta INTERNA (equipe da casa)            -> aba "Demandas Internas"
+  //   PAUTA_DED   = dedicados (DAs alocados no cliente)       -> aba "Houses · Dedicados"
+  //   PAUTA_HOUSE = clientes house (Nova Era / Pátio Gourmet) -> aba "Nova Era & Pátio"
+  //   HOUSES = dedicados + clientes house
+  const PC=(typeof PAUTA_CORE!=='undefined')?PAUTA_CORE:PAUTA;
+  const PD=(typeof PAUTA_DED!=='undefined')?PAUTA_DED:[];
+  const PH=(typeof PAUTA_HOUSE!=='undefined')?PAUTA_HOUSE:[];
+  const PHOU=PD;   // quadro das houses = SÓ dedicados. Nova Era / Pátio só na aba própria.
+  const S_DED=new Set(DED_DAS);                     // quem entrega pelo lado das houses dedicadas
+  const S_HOU=new Set([...HOUSE_DAS, ...DED_DAS]);  // house + dedicados (usado só para excluir do lado interno)
+  // ENTREGUES HOJE — peças DISTINTAS, não soma por pessoa.
+  // Duas correções necessárias:
+  //   1) peça tocada por 2 pessoas contaria 2x  -> conta por chave da peça
+  //   2) peça entregue que CONTINUA em aberto contaria 2x (uma vez em cada lado) -> tira do lado das entregues
+  // chave = cliente + título limpo, para não confundir peças de nome genérico entre clientes
+  const _nm=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+      .toUpperCase().replace(/[^A-Z0-9 ]/g,' ').replace(/\s+/g,' ').trim();
+  const _chave=(cli,pe)=>_nm(cli).slice(0,18)+'|'+_nm(pe).slice(0,50);
+  const _abKeys=new Set();
+  const _gr=n=>((typeof ALOC!=='undefined'&&ALOC[n])?(ALOC[n].g||ALOC[n][0]):'');
+  const _NUC=new Set(Object.keys(typeof ALOC!=='undefined'?ALOC:{}).filter(k=>['Interno','Mídia Off'].includes(_gr(k))));
+  const _entI=new Set(), _entH=new Set();
+  if(typeof ACT!=='undefined'){
+    ACT.filter(a=>a.dia===REF && a.cl!=='adm').forEach(a=>{
+      if(S_DED.has(a.da)) _entH.add(_chave(a.cliente,a.peca));
+      else if(_NUC.has(a.da)) _entI.add(_chave(a.cliente,a.peca));   // redação e vídeo ficam nas abas deles
+    });
+  }
+  // utilização = horas do que vence hoje ÷ jornada das pessoas do grupo
+  const utiliz=(arr,dentroHouse)=>{
+    const it=arr.filter(p=>p.prazo===REF);
+    const pes=[...new Set(it.flatMap(p=>p.das))].filter(d=>d&&d!=='(sem)'&&(dentroHouse?S_HOU.has(d):!S_HOU.has(d)));
+    const dem=it.reduce((s,p)=>s+tmin(p),0);
+    const cap=pes.filter(m=>!(typeof AUSENTES!=='undefined'&&AUSENTES.includes(m))).reduce((s,m)=>s+capMembro(m),0);
+    const med=it.length?dem/it.length:0;
+    const cabem=med?Math.floor(cap/med):null;
+    return {pct:cap?Math.round(100*dem/cap):0,pes:pes.length,dem:dem,cap:cap,
+            sobra:cabem==null?null:cabem-it.length};
+  };
+  // REGRA: cada quadro espelha EXATAMENTE uma aba, para o número ser conferível.
+  //   Pauta interna     = aba "Demandas Internas"  (criação + mídia off)   -> PAUTA_CORE
+  //   Pauta das houses  = abas "Dedicados" + "Nova Era & Pátio"            -> PAUTA_DED + PAUTA_HOUSE
+  // Redação e Vídeo têm abas próprias e quadros próprios — não entram aqui.
+  const PINT=PC;
+  const _abI=PINT.filter(p=>p.prazo===REF), _abH=PHOU.filter(p=>p.prazo===REF);
+  _abI.forEach(p=>_abKeys.add(_chave(p.cliente,p.peca))); _abH.forEach(p=>_abKeys.add(_chave(p.cliente,p.peca)));
+  const abInt=_abI.length, abHou=_abH.length;
+  // entregues que NÃO continuam na pauta em aberto (senão a mesma peça entra duas vezes)
+  let entInt=0, entHou=0;
+  if(typeof ACT!=='undefined'){
+    _entI.forEach(k=>{ if(!_abKeys.has(k)) entInt++; });
+    _entH.forEach(k=>{ if(!_abKeys.has(k)) entHou++; });
+  } else {
+    AGG.filter(g=>g.dia===REF).forEach(g=>{ S_HOU.has(DAS[g.d]) ? (entHou+=g.p) : (entInt+=g.p); });
+  }
+  const dInt={cri:PC.filter(p=>p.prazo===REF).length,
+              red:(typeof REDACAO!=='undefined'?REDACAO:[]).filter(p=>p.prazo===REF).length,
+              vid:(typeof VIDEO!=='undefined'?VIDEO:[]).filter(p=>p.prazo===REF).length};
+  const dHou={ded:PD.filter(p=>p.prazo===REF).length, hou:PH.filter(p=>p.prazo===REF).length};
+  const uI=utiliz(PINT,false), uH=utiliz(PHOU,true);
+  // utilização do lado interno só com gente do núcleo (criação + mídia off)
+  uI.pes=[...new Set(PINT.filter(p=>p.prazo===REF).flatMap(p=>p.das))].filter(d=>_NUC.has(d)).length;
+  uH.pes=[...new Set(PHOU.filter(p=>p.prazo===REF).flatMap(p=>p.das))].filter(d=>S_DED.has(d)).length;
+  const cls=v=>v>100?'alert':(v<=85?'good':'');
+  // REGRA: peça entregue hoje ESTAVA na pauta de hoje.
+  // Pauta do dia = o que vence hoje e segue em aberto + o que já foi concluído hoje.
+  const bloco=(titulo,sub,tipo,ab,ent,u)=>{
+    const total=ab+ent, pctC=total?Math.round(100*ent/total):0;
+    return `
+    <section class="grp-exec ${tipo}">
+      <h4 class="grp-t"><span class="grp-dot"></span>${titulo}<span class="grp-sub">${sub}</span></h4>
+      <div class="grp-cards">
+        <div class="ex"><div class="v">${total}</div><div class="l">Jobs na pauta de hoje</div><div class="d">${ab} em aberto + ${ent} concluídos</div></div>
+        <div class="ex good"><div class="v">${pctC}%</div><div class="l">Concluído do dia</div><div class="d">${ent} de ${total} peças</div></div>
+        <div class="ex ${cls(u.pct)}"><div class="v">${u.pct}%</div><div class="l">Utilização do que resta</div><div class="d">${u.pes} pessoas · ${hor(u.dem)} em aberto${u.sobra!=null?` · <b>${u.sobra>=0?'cabem +'+u.sobra:Math.abs(u.sobra)+' não cabem'}</b>`:''}</div></div>
+      </div>
+    </section>`;};
+  // ausências entram como nota discreta no subtítulo do bloco, sem faixa no topo
+  const _fora=(typeof AUSENTES!=='undefined'&&AUSENTES.length)?AUSENTES.map(sn).join(' · '):'';
+  el.innerHTML = bloco('Pauta interna','criação + mídia off'+(_fora?' · fora hoje: '+_fora:''),'int',abInt,entInt,uI)
+               + bloco('Pauta das houses','houses dedicadas','hou',abHou,entHou,uH);
+}
+
+// ================= PÁGINA 1 =================
+let chTipoP; const EXP1=new Set();
+function renderP1(){
+  const L=LIM();
+  const PD=($('pautaDia')&&$('pautaDia').value)||REF, isHoje=PD===REF;
+  const dLab=isHoje?'hoje':fmtD(PD).slice(0,5);
+  const carga={}, tot={};
+  const TVDA=new Set([...TEAM_RED,...TEAM_VID,'TRÁFEGO']);  // Redação/Vídeo/Tráfego têm abas próprias — fora do setor de Arte
+  PAUTA_CORE.forEach(p=>p.das.forEach(d=>{ if(TVDA.has(d)) return; tot[d]=(tot[d]||0)+1; if(p.prazo===PD) carga[d]=(carga[d]||0)+1;}));
+  const das=Object.keys(tot); das.forEach(d=>carga[d]=carga[d]||0);
+  das.sort((a,b)=>carga[b]-carga[a]||a.localeCompare(b));
+  const hoje=PAUTA_CORE.filter(p=>p.prazo===PD).length;
+  const atras=PAUTA_CORE.filter(p=>p.prazo&&p.prazo<REF).length;
+  const alta=PAUTA_CORE.filter(p=>p.prio==='Alta').length;
+  const retr=PAUTA_CORE.filter(p=>isRetrab(p.status)).length;
+  const acima=das.filter(d=>carga[d]>L);
+  const exced=das.reduce((s,d)=>s+Math.max(0,carga[d]-L),0);
+  const folga=das.reduce((s,d)=>s+Math.max(0,L-carga[d]),0);
+  const cargaT=das.reduce((s,d)=>s+carga[d],0);
+  const feitas=MOVP.filter(p=>p.entregue).length;
+  const nucSt=movStats(isNucleoP);   // concluídas do núcleo sobre a pauta do núcleo (100% = núcleo)
+  const hrs={};
+  das.forEach(d=>{hrs[d]=PAUTA_CORE.filter(p=>p.prazo===PD&&p.das.includes(d)).reduce((s,p)=>s+tminD(d,p),0);});
+  const capEf=Math.round(JOR()*EFIC);
+  const hrsT=das.reduce((s,d)=>s+hrs[d],0), capH=das.length*capEf;
+  // entregues no dia (do relatório de atividades) por DA — o que o profissional realmente concluiu
+  const entrDia={}, trabDia={}, admDia={}, admMin={};
+  AGG.filter(g=>g.dia===PD).forEach(g=>{ const m=DAS[g.d];
+    entrDia[m]=(entrDia[m]||0)+g.p;      // peças concluídas hoje (só etapas produtivas / retrabalho)
+    admDia[m]=(admDia[m]||0)+(g.pa||0);  // peças que ficaram só em etapa administrativa — fora da entrega
+    admMin[m]=(admMin[m]||0)+(g.ma||0);
+    trabDia[m]=(trabDia[m]||0)+g.m;      // MINUTOS já trabalhados hoje (timesheet real)
+  });
+  // Capacidade restante = tempo até o fim do expediente (fonte confiável: o relógio).
+  // NÃO descontamos as horas apontadas porque o timesheet do iClips traz timers esquecidos
+  // (ex.: 19h em um único dia) — isso zeraria a capacidade e falsearia o indicador.
+  // As horas apontadas ficam visíveis na coluna "Trabalhado", com alerta quando passam da jornada.
+  const _fora=m=>(typeof AUSENTES!=='undefined'&&AUSENTES.includes(m));
+  const capRestPessoa=m=>_fora(m)?0:horasRestantesMin();
+  const trabSuspeito=m=>(trabDia[m]||0) > capMembro(m)*1.15;
+  // (bloco de KPIs complementares removido — a faixa executiva já resume o dia)
+  const mp=Math.max(10,Math.min(100,+$('metaPct').value||80));
+  const alvo=Math.ceil(MOVP.length*mp/100);
+  const rp=100*feitas/Math.max(1,MOVP.length);
+  const hit=feitas>=alvo;
+  const novasN=NOVAS.length, totalDia=MOVP.length+novasN;
+  const hr=horasRestantesMin();
+  const relogio=REF===HOJE_ISO?`${String(AGORA.getHours()).padStart(2,'0')}:${String(AGORA.getMinutes()).padStart(2,'0')}`:'—';
+  $('metaBox').innerHTML=
+    `<div class="kpis" style="margin-bottom:10px">
+      ${kpi('Pauta da manhã',MOVP.length)}
+      ${kpi('Entradas após fechamento',novasN,novasN?'alert':'')}
+      ${kpi('Pauta total do dia',totalDia)}
+      ${kpi('Peças entregues',feitas,'good')}
+      ${kpi('% da pauta concluída',rp.toFixed(0)+'%',hit?'good':rp>=50?'':'alert')}
+      ${kpi('Horas úteis restantes',REF===HOJE_ISO?hor(hr)+` <span style="font-size:12px;color:#667">(${relogio})</span>`:'dia fechado')}
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px">
+      <div style="font-size:13px;color:#334"><b style="font-size:20px;color:${hit?'var(--green)':'var(--navy)'}">${feitas}</b> de ${MOVP.length} da pauta · meta ${mp}% = <b>${alvo}</b></div>
+      ${hit?'<span class="badge b-green">META ATINGIDA ✓</span>':`<span class="badge b-orange">faltam ${alvo-feitas}</span>`}</div>
+    <div class="util-bar" style="height:18px"><span style="width:${Math.min(100,rp)}%;background:${hit?'var(--green)':'#33373D'}"></span><i style="left:${mp}%"></i></div>
+    `;
+  const fmtsInt=Object.entries(TEMPOS_INT).sort((a,b)=>b[1][1]-a[1][1]);
+  const fmtsExtra=Object.entries(TEMPOS).filter(([f])=>!TEMPOS_INT[f]).sort((a,b)=>b[1][1]-a[1][1]).slice(0,12);
+  $('tbTemp').querySelector('tbody').innerHTML =
+    fmtsInt.map(([f,v])=>`<tr><td>${esc(f)}</td><td><b style="color:var(--navy);font-size:12.5px">${hor(v[0])}</b></td><td><b>${(420/v[0]).toFixed(1)}</b> peças</td><td style="color:#778">${TEMPOS[f]?hor(TEMPOS[f][0]):'—'}</td><td style="color:#778">${v[1]}</td></tr>`).join('')+
+    fmtsExtra.map(([f,v])=>`<tr style="opacity:.65"><td>${esc(f)}</td><td>${hor(v[0])} <span style="font-size:11.5px;color:#999">(agência)</span></td><td>${(420/v[0]).toFixed(1)} peças</td><td style="color:#778">${hor(v[0])}</td><td style="color:#778">só agência</td></tr>`).join('');
+  // plano
+  const overs=das.filter(d=>carga[d]>L).map(d=>({d,x:carga[d]-L}));
+  const frees=das.filter(d=>carga[d]<L && REDIST_POOL.includes(d)).map(d=>({d,s:L-carga[d]})).sort((a,b)=>b.s-a.s);
+  const altaRisco=PAUTA_CORE.filter(p=>p.prio==='Alta'&&p.prazo===PD&&p.das.some(d=>carga[d]>L)).length;
+  $('btnPlano').textContent=planoOpen?'Ocultar plano':'Ver plano';
+  $('planoResumo').innerHTML=`<span class="badge ${acima.length?'b-red':'b-green'}">${acima.length} DA${acima.length!==1?'s':''} acima do limite</span> <span class="badge ${exced?'b-orange':'b-green'}">${exced} a redistribuir</span> <span class="badge b-blue">folga ${folga}</span>`;
+  $('plano').innerHTML = exced===0
+    ? `<div class="col"><div class="big" style="color:var(--green)">Pauta equilibrada ✓</div><div style="font-size:12px;color:#667">Nenhum DA acima do limite de ${L}. Folga: ${folga} slots.</div></div>`
+    : `<div class="col"><h4>Movimentações necessárias</h4><div class="big alert">${exced} peça${exced>1?'s':''}</div>
+       <div style="font-size:12px;color:#667">folga disponível: ${folga} ${folga>=exced?'(cobre ✓)':'(NÃO cobre!)'}${altaRisco?` · <b style="color:var(--red)">${altaRisco} alta prioridade em DA estourado</b>`:''}<br>Redistribuição permitida apenas entre os DAs internos — houses e dedicados não recebem demandas realocadas.</div></div>
+       <div class="col"><h4>DAs acima do limite (${acima.length})</h4>${overs.map(o=>`<span class="chip2 c-red">${esc(sn(o.d))} · ${carga[o.d]}/${L} (+${o.x})</span>`).join('')}</div>
+       <div class="col"><h4>Redistribuição — dar para <span style="text-transform:none;font-weight:400">(somente DAs internos: Arthur, Alexandre, Gustavo e Guilherme)</span></h4>${frees.slice(0,10).map(f=>`<span class="chip2 c-green">${esc(sn(f.d))} +${f.s}</span>`).join('')||'—'}</div>`;
+  // tipos
+  const tC=cnt(PAUTA_CORE.map(p=>p.tipo)), fC=cnt(PAUTA_CORE.map(p=>p.fmt));
+  const tK=Object.keys(tC).sort((a,b)=>tC[b]-tC[a]);
+  chTipoP.data.labels=tK.map(k=>`${k} · ${tC[k]} (${(100*tC[k]/Math.max(1,PAUTA_CORE.length)).toFixed(0)}%)`);
+  chTipoP.data.datasets[0].data=tK.map(k=>tC[k]); chTipoP.update();
+  $('tipoInfo').innerHTML=mini('Tipos de pauta',tC)+mini('Formatos',fC);
+  // tabela por DA agrupada
+  const maxU=Math.max(2*L,...das.map(d=>carga[d]));
+  const gkey=d=>{const a=aloc(d);return a.g;};
+  const groups={};
+  das.forEach(d=>{(groups[gkey(d)]=groups[gkey(d)]||[]).push(d);});
+  const gsum=g=>groups[g].reduce((s,d)=>s+carga[d],0);
+  const gnames=Object.keys(groups).sort((a,b)=>gsum(b)-gsum(a));
+  $('tbP1').querySelector('tbody').innerHTML=gnames.map(gn=>{
+    const ds=groups[gn], t=gsum(gn), cap=ds.length*L, ac=ds.filter(d=>carga[d]>L).length;
+    const gh=`<tr class="grp-head"><td></td><td colspan="2">${esc(gn)} — ${ds.length} DA${ds.length>1?'s':''}</td><td>${t}</td><td>${hor(ds.reduce((s,d)=>s+(hrs[d]||0),0))}</td><td>${cap-t}</td><td></td><td>${ds.reduce((s,d)=>s+tot[d],0)}</td><td colspan="2">${ac?ac+' acima do limite':'ok'}</td></tr>`;
+    return gh+ds.map(d=>{
+      const c=carga[d], open=EXP1.has(d);
+      const jobs=PAUTA_CORE.filter(p=>p.das.includes(d)).sort((a,b)=>((b.prazo===PD)-(a.prazo===PD))||String(a.prazo||'9999').localeCompare(String(b.prazo||'9999'))||((b.prio==='Alta')-(a.prio==='Alta')));
+      const fC2=cnt(jobs.map(p=>p.fmt));
+      const tops=Object.keys(fC2).sort((a,b)=>fC2[b]-fC2[a]).slice(0,3).map(k=>`${k} (${fC2[k]})`).join(' · ');
+      const sit=c>L?'<span class="badge b-red">ACIMA</span>':c===L?'<span class="badge b-orange">No limite</span>':'<span class="badge b-green">Folga</span>';
+      const pctU=Math.min(100,100*c/maxU), lp=100*L/maxU;
+      const hD=hrs[d]||0, jOK=hD<=Math.round(JOR()*EFIC);
+      const head=`<tr class="da-head${c>L?' over':''}${open?' exp':''}" data-da="${esc(d)}"><td><span class="car">&#9654;</span></td><td>${esc(sn(d))}</td><td><span class="badge b-blue">${esc(alocTxt(d))}</span></td><td><b>${c}</b></td><td style="${jOK?'':'color:var(--red);font-weight:700'}">${hor(hD)}</td><td>${L-c}</td><td><div class="util-bar${c>L?' over':''}"><span style="width:${pctU}%"></span><i style="left:${lp}%"></i></div></td><td>${tot[d]}</td><td style="font-size:11.5px;color:#556">${esc(tops)}</td><td>${sit}</td></tr>`;
+      const body=open?jobs.map(p=>{const s=situ(p.prazo);const cl=s==='Vence hoje'?'b-orange':s==='Atrasada'?'b-red':'b-green';
+        return `<tr class="job-row"><td></td><td colspan="3">${esc(p.cliente)} — ${esc(p.peca)}</td><td>${esc(p.fmt)}</td><td style="white-space:nowrap">~${hor(tmin(p))}</td><td>${p.prio==='Alta'?'<b style="color:var(--red)">Alta</b>':esc(p.prio)}</td><td>${esc(p.status)}</td><td colspan="2"><span class="badge ${cl}">${s} · ${fmtD(p.prazo)}</span></td></tr>`;}).join(''):'';
+      return head+body;
+    }).join('');
+  }).join('');
+  const SQUADS=[
+    {nome:'Núcleo Interno · Digital', nota:'', membros:REDIST_POOL},
+    {nome:'Squad Mídia Off · gestão Samuel Freitas', nota:'', membros:['Samuel Freitas de Souza','Francisca Samantha Salgado de Araújo','Johnes Saboia Andrade','Antônio Sérgio Rocha Braga']}
+  ];
+  $('govPanel').innerHTML=SQUADS.map(sq=>{
+    const ms=sq.membros;
+    const dem=ms.reduce((s,m)=>s+(hrs[m]||0),0);              // horas AINDA EM ABERTO
+    const capRestSquad=ms.reduce((s,m)=>s+capRestPessoa(m),0);// capacidade que REALMENTE resta hoje
+    const trabSquad=ms.reduce((s,m)=>s+(trabDia[m]||0),0);    // já trabalhado hoje
+    const oc=Math.round(100*dem/Math.max(1,capRestSquad));    // ocupação acompanha as horas do dia
+    const cabe=dem<=capRestSquad;
+    const pcs=ms.reduce((s,m)=>s+(carga[m]||0)+(entrDia[m]||0),0), bk=ms.reduce((s,m)=>s+(carga[m]||0),0);
+    const st=oc>100?`<span class="badge b-red">SOBRECARGA · ${oc}%</span>`:oc>85?`<span class="badge b-orange">No limite · ${oc}%</span>`:`<span class="badge b-green">Ocupação ${oc}%</span>`
+      +(cabe?'':` <span class="badge b-orange">não cabe até ${($('fimExp')&&$('fimExp').value)||'18:00'}</span>`);
+    const rows=ms.map(m=>{
+      const h=hrs[m]||0, c=carga[m]||0;
+      const capRest2=capRestPessoa(m);                          // tempo que ainda resta hoje
+      const fimDia=capRest2<60;                                 // menos de 1h de expediente: % perde sentido
+      const ocm=Math.round(100*h/Math.max(1,capRest2));         // ocupação sobre o que resta hoje
+      const cabeM=h<=capRest2;
+      const ent=entrDia[m]||0, diaTot=c+ent, pend=c;
+      const excede=Math.max(0,Math.round((h-capRest2)/Math.max(1,(c?h/c:60))));
+      const sit = _fora(m) ? (pend? '<span class="badge b-orange" title="Fora hoje e com pauta em aberto: remanejar">fora · '+pend+' p/ remanejar</span>'
+                                   : '<span class="badge b-grey">fora hoje</span>')
+                : (pend===0&&ent>0) ? '<span class="badge b-green">concluído</span>'
+                : (pend===0 ? '<span class="badge b-blue">disponível</span>'
+                : (fimDia ? '<span class="badge b-orange">'+pend+' para amanhã</span>'
+                : (ocm>100 ? '<span class="badge b-red" title="Ocupação '+ocm+'% do tempo restante">'+(excede?excede+' não cabe'+(excede>1?'m':''):'SOBRECARGA')+'</span>'
+                : (!cabeM ? '<span class="badge b-orange">não cabe hoje</span>'
+                : '<span class="badge b-green">'+pend+' em aberto</span>'))));
+      const fr=FRENTE_DA[m]; const frTag=fr?`<span class="badge b-${FRENTE_COR[fr]||'blue'}">${fr}</span>`:'<span style="color:#aab">—</span>';
+      return `<tr><td>${esc(sn(m))}</td><td>${frTag}</td><td><b>${diaTot}</b></td><td><b style="color:var(--green)">${ent}</b></td><td>${hor(h)}</td><td style="${cabeM?'':'color:var(--orange);font-weight:700'}">${hor(capRest2)}</td><td>${fimDia?'<span style="color:#889;font-size:11.5px">fim do dia</span>':`<div class="util-bar${ocm>100?' over':''}"><span style="width:${Math.min(100,ocm)}%"></span></div>`}</td><td>${fimDia?'<span style="color:#889">—</span>':`<b>${ocm}%</b>`}</td><td>${pend}</td><td>${sit}</td></tr>`;
+    }).join('');
+    const defc=dem-capRestSquad;
+    const nAb=ms.reduce((s,m)=>s+(carga[m]||0),0);
+    const nEnt=ms.reduce((s,m)=>s+(entrDia[m]||0),0);
+    const medio=nAb?Math.round(dem/nAb):0;
+    // CAPACIDADE EM PEÇAS: quantos jobs desse mix cabem no tempo que resta
+    const cabemPcs=medio?Math.floor(capRestSquad/medio):0;
+    const sobra=cabemPcs-nAb;
+    const fimSquad=capRestSquad/Math.max(1,ms.length)<60;
+    const cell=(v,l,cls)=>`<div class="lt-i"><div class="lt-v ${cls||''}">${v}</div><div class="lt-l">${l}</div></div>`;
+    const veredito = fimSquad
+      ? `<b class="lt-w">${nAb} para amanhã</b>`
+      : (defc>0 ? `<b class="lt-r">${Math.abs(sobra)} não cabe${Math.abs(sobra)!==1?'m':''} hoje</b>`
+                : `<b class="lt-g">folga de ${sobra} peça${sobra!==1?'s':''}</b>`);
+    const leitura = cell(nAb+nEnt,'na pauta de hoje')
+      + cell(nEnt,'entregues','lt-g') + cell(nAb,'em aberto')
+      + cell(hor(dem),'de execução') + cell(hor(capRestSquad),'de capacidade')
+      + cell(medio+' min','média por peça') + cell(cabemPcs,'cabem hoje')
+      + `<div class="lt-i lt-vd">${veredito}</div>`;
+    return `<div style="margin-bottom:18px"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px">
+      <div><b style="color:var(--navy);font-size:13.5px">${sq.nome}</b>${sq.nota?`<div style="font-size:12px;color:#778">${sq.nota}</div>`:''}</div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span class="badge b-blue">${pcs} peças na pauta ${isHoje?'de hoje':'do dia'} · ${bk} em aberto</span><span class="badge b-blue">${hor(dem)} de execução / ${hor(capRestSquad)} de capacidade</span>${(()=>{const na=ms.reduce((s,m)=>s+(admDia[m]||0),0),ha=ms.reduce((s,m)=>s+(admMin[m]||0),0);return na?`<span class="badge b-grey" title="Aprovação de briefing, arquivamento e afins: não é entrega de peça, então não entra na contagem">${na} em etapa administrativa · ${hor(ha)}</span>`:'';})()}${st}</div></div>
+      <div class="scroll" style="max-height:260px"><table><thead><tr><th>Profissional</th><th title="Frente de atuação definida pela gestão">Frente</th><th>Peças no dia</th><th title="Peças concluídas no dia (relatório de atividades)">Entregues</th><th title="Soma do tempo de execução das peças ainda em aberto (mediana real por formato)">Horas de execução</th><th title="Capacidade de entrega restante: tempo até o fim do expediente">Capacidade restante</th><th>Ocupação</th><th>%</th><th title="Fila ainda em aberto: peças na pauta menos as já entregues">Backlog (pend.)</th><th>Situação</th></tr></thead><tbody>${rows}</tbody></table></div>
+      <div class="leitura">${leitura}</div></div>`;
+  }).join('');
+  const atrs=PAUTA_CORE.filter(p=>p.prazo&&p.prazo<REF).sort((a,b)=>a.prazo.localeCompare(b.prazo));
+  $('nAtr').textContent=atrs.length? atrs.length+' peça'+(atrs.length>1?'s':'') : 'nenhum ✓';
+  const dAtr=p=>Math.round((new Date(REF)-new Date(p.prazo))/86400000);
+  $('tbAtr').querySelector('tbody').innerHTML = atrs.length? atrs.map(p=>
+    `<tr><td>${esc(p.cliente)}</td><td>${esc(p.peca)}</td><td>${p.das.map(sn).map(esc).join(', ')}</td><td>${fmtD(p.prazo)}</td><td><b style="color:var(--red)">${dAtr(p)}d</b></td><td>${esc(p.status)}</td></tr>`).join('')
+    : '<tr><td colspan="6" style="color:var(--green);font-weight:600">Nenhum job atrasado na pauta interna ✓</td></tr>';
+  const rc={};
+  PAUTA_INT.forEach(p=>{const c=rc[p.cliente]=rc[p.cliente]||{n:0,r:0};c.n++;if(isRetrab(p.status))c.r++;});
+  const alertas=Object.entries(rc).filter(([c,v])=>v.r>=3||(v.n>=4&&v.r/v.n>0.3)).sort((a,b)=>b[1].r-a[1].r);
+  $('tbRef').querySelector('tbody').innerHTML = alertas.length? alertas.map(([c,v])=>
+    `<tr><td>${esc(c)}</td><td>${v.n}</td><td><b>${v.r}</b></td><td>${(100*v.r/v.n).toFixed(0)}%</td><td><span class="badge b-red">AUDITAR BRIEFING</span></td></tr>`).join('')
+    : '<tr><td colspan="5" style="color:var(--green);font-weight:600">Nenhum cliente com refação recorrente ✓</td></tr>';
+  const futD={};
+  PAUTA_CORE.forEach(p=>{ if(p.prazo && p.prazo>=REF) futD[p.prazo]=(futD[p.prazo]||0)+1; });
+  $('diasPauta').innerHTML=Object.keys(futD).sort().slice(0,14)
+    .map(d=>`<button data-d="${d}" class="${d===PD?'on':''}">${d===REF?'Hoje':fmtD(d).slice(0,5)} · ${futD[d]}</button>`).join('');
+}
+let planoOpen=false;
+$('btnPlano').addEventListener('click',()=>{planoOpen=!planoOpen;$('plano').style.display=planoOpen?'flex':'none';$('btnPlano').classList.toggle('on',planoOpen);renderP1();});
+$('tbP1').addEventListener('click',e=>{const tr=e.target.closest('.da-head');if(!tr)return;const d=tr.dataset.da;EXP1.has(d)?EXP1.delete(d):EXP1.add(d);renderP1();});
+
+// ================= PÁGINA 2 =================
+let chMovDA, chBal, movTab='ent';
+// Comparativo do dia: carga inicial (planejado) × entregas × remanejamentos (rollover)
+function renderComparativo(){
+  const el=document.getElementById('cmpDia'); if(!el) return;
+  const hMin=a=>a.reduce((s,p)=>s+tmin(p),0);
+  const ini=MOVP, ent=MOVP.filter(p=>p.entregue), pend=MOVP.filter(p=>!p.entregue);
+  const tx=Math.round(100*ent.length/Math.max(1,ini.length));
+  const cel=(v,l,sub,cls)=>`<div class="ex ${cls||''}"><div class="v">${v}</div><div class="l">${l}</div>${sub?`<div class="d" style="color:#889">${sub}</div>`:''}</div>`;
+  // bloco D-1 (rollover do dia anterior), quando houver histórico
+  let d1html='';
+  if(typeof D1!=='undefined' && D1 && D1.total){
+    const txd=Math.round(100*D1.entregues/Math.max(1,D1.total));
+    d1html=`<div style="background:var(--grey);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:12px;font-size:12.5px;color:#334">
+      <b>Dia anterior (${fmtD(D1.dia)}):</b> carga de <b>${D1.total}</b> jobs · <b style="color:var(--green)">${D1.entregues}</b> entregues (${txd}%) ·
+      <b style="color:var(--red)">${D1.rollover}</b> remanejados para hoje.</div>`;
+  }
+  el.innerHTML=d1html+`<div class="execbar" style="margin:2px 0 10px">`+
+    cel(ini.length,'Carga inicial do dia',`${hor(hMin(ini))} estimadas`)+
+    cel(ent.length,'Entregues',`${tx}% da carga · ${hor(hMin(ent))}`,'good')+
+    cel(pend.length,'Remanejados p/ o próximo dia',`${hor(hMin(pend))} a repassar`,pend.length?'alert':'good')+
+    cel(NOVAS.length,'Entraram depois do fechamento',`${hor(hMin(NOVAS))} não planejadas`)+
+    `</div>`+
+    `<div style="font-size:11.5px;color:#667">Leitura: da carga inicial de <b>${ini.length}</b> jobs, <b>${ent.length}</b> saíram (${tx}%) e <b>${pend.length}</b> seguem para o próximo dia. `+
+    (NOVAS.length?`Além disso, <b>${NOVAS.length}</b> jobs entraram fora do planejamento.`:'Nenhum job novo entrou fora do planejamento.')+`</div>`+
+    `<div class="scroll" style="max-height:300px;margin-top:10px"><table><thead><tr><th>Situação</th><th>Cliente</th><th>Peça</th><th>Responsável</th><th>~Tempo</th></tr></thead><tbody>`+
+    pend.slice(0,60).map(p=>`<tr><td><span class="badge b-red">remanejado</span></td><td>${esc(p.cliente)}</td><td>${esc(p.peca)}</td><td>${esc((p.das||[]).map(sn).join(', '))}</td><td>${hor(tmin(p))}</td></tr>`).join('')+
+    ent.slice(0,40).map(p=>`<tr><td><span class="badge b-green">entregue</span></td><td>${esc(p.cliente)}</td><td>${esc(p.peca)}</td><td>${esc((p.das||[]).map(sn).join(', '))}</td><td>${hor(tmin(p))}</td></tr>`).join('')+
+    `</tbody></table></div>`;
+}
+function renderP2(){
+  renderComparativo();
+  const ent=MOVP.filter(p=>p.entregue), pen=MOVP.filter(p=>!p.entregue);
+  const taxa=pct(ent.length,MOVP.length);
+  $('kpi2').innerHTML = kpi('Pauta da manhã',MOVP.length)+kpi('Jobs concluídos',ent.length,'good')+
+    kpi('Taxa de conclusão',taxa.toFixed(0)+'%',taxa>=70?'good':taxa>=50?'':'alert')+
+    kpi('Pendentes',pen.length,pen.length?'':'good')+kpi('Novas demandas',NOVAS.length)+kpi('Pauta agora',pen.length+NOVAS.length);
+  // Resultado do dia: entregues × horas registradas
+  const hND={};
+  AGG.filter(g=>g.dia===REF).forEach(g=>{hND[DAS[g.d]]=(hND[DAS[g.d]]||0)+g.m;});
+  const ePer={};
+  ent.forEach(p=>p.das.forEach(d=>{ePer[d]=(ePer[d]||0)+1;}));
+  const totH=Object.values(hND).reduce((a,b)=>a+b,0);
+  const nomes=uniq([...Object.keys(ePer),...Object.keys(hND)])
+    .sort((a,b)=>(ePer[b]||0)-(ePer[a]||0)||(hND[b]||0)-(hND[a]||0));
+  const onT=ent.filter(p=>p.prazo&&p.prazo>=REF).length, lateE=ent.length-onT;
+  $('kpiRes').innerHTML =
+    kpi('Jobs concluídos',ent.length,'good')+
+    kpi('No prazo (on-time)',`${onT} <span style="font-size:13px;color:#667">(${ent.length?(100*onT/ent.length).toFixed(0):0}%)</span>`,ent.length&&onT/ent.length>=0.8?'good':ent.length?'alert':'')+
+    kpi('Entregues já atrasados',lateE,lateE?'alert':'good')+
+    kpi('Horas registradas',hor(totH))+
+    kpi('Média por job',ent.length?hor(totH/ent.length):'—')+
+    kpi('Jobs por hora',totH?(ent.length/(totH/60)).toFixed(1):'—')+
+    kpi('Profissionais ativos',nomes.length);
+  $('tbRes').querySelector('tbody').innerHTML = nomes.map(n=>{
+    const e=ePer[n]||0, h=hND[n]||0;
+    return `<tr><td>${esc(sn(n))}<div style="margin-top:2px"><span class="badge b-blue" style="font-size:11.5px">${esc(aloc(n).f||aloc(n).g)}</span></div></td>
+      <td><b>${e}</b></td><td>${hor(h)}</td><td>${e?hor(h/e):'—'}</td><td>${h?(e/(h/60)).toFixed(1):'—'}</td></tr>`;
+  }).join('');
+
+  const agg={};
+  MOVP.forEach(p=>p.das.forEach(d=>{agg[d]=agg[d]||{p:0,e:0};agg[d].p++;if(p.entregue)agg[d].e++;}));
+  const das=Object.keys(agg).sort((a,b)=>pct(agg[b].e,agg[b].p)-pct(agg[a].e,agg[a].p)||agg[b].p-agg[a].p);
+  chMovDA.data.labels=das.map(sn);
+  chMovDA.data.datasets[0].data=das.map(d=>agg[d].e);
+  chMovDA.data.datasets[1].data=das.map(d=>agg[d].p-agg[d].e);
+  chMovDA.update();
+  chBal.data.datasets[0].data=[ent.length,pen.length,NOVAS.length]; chBal.update();
+  const nc=cnt(NOVAS.map(p=>p.cliente));
+  $('novasCli').innerHTML=mini('Novas por cliente',nc)||'—';
+  let rows,head;
+  const line=(p,extra)=>`<tr><td>${esc(p.cliente)}</td><td>${esc(p.peca)}</td><td>${esc(p.tipo)}</td><td>${esc(p.das.map(sn).join(', '))}</td>${extra}</tr>`;
+  if(movTab==='ent'){head='<tr><th>Cliente</th><th>Peça</th><th>Tipo</th><th>DA</th><th>Último status</th></tr>';
+    rows=ent.map(p=>line(p,`<td><span class="badge b-green">${esc(p.status0)}</span></td>`));}
+  else if(movTab==='pen'){head='<tr><th>Cliente</th><th>Peça</th><th>Tipo</th><th>DA</th><th>Status manhã → agora</th></tr>';
+    rows=pen.map(p=>{const st=p.status1&&p.status1!==p.status0?`${esc(p.status0)} → <b>${esc(p.status1)}</b>`:esc(p.status0);return line(p,`<td><span class="badge b-orange">${st}</span></td>`);});}
+  else {head='<tr><th>Cliente</th><th>Peça</th><th>Tipo</th><th>DA</th><th>Status atual</th></tr>';
+    rows=NOVAS.map(p=>line(p,`<td><span class="badge b-blue">${esc(p.status0)}</span></td>`));}
+  $('movHead').innerHTML=head;
+  $('tbMov').querySelector('tbody').innerHTML=rows.join('');
+  $('nMov').textContent=rows.length;
+}
+$('movTabs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+  document.querySelectorAll('#movTabs button').forEach(x=>x.classList.remove('on'));b.classList.add('on');movTab=b.dataset.t;renderP2();});
+
+// ================= PÁGINA 3 =================
+let chSem, chDias, chTend, mesSel; const EXP3=new Set();
+const MNOME={'01':'Jan','02':'Fev','03':'Mar','04':'Abr','05':'Mai','06':'Jun','07':'Jul','08':'Ago','09':'Set','10':'Out','11':'Nov','12':'Dez'};
+const WD=['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'];
+const dow=iso=>{const[y,m,d]=iso.split('-').map(Number);return (new Date(y,m-1,d).getDay()+6)%7;};
+const wkKey=d=>{const[y,m,dd]=d.split('-').map(Number);const dt=new Date(y,m-1,dd);dt.setDate(dt.getDate()-((dt.getDay()+6)%7));return dt.toISOString().slice(0,10);};
+// rótulo numérico em cima de cada barra (fonte legível)
+// rótulo numérico em cima de cada barra (gráfico de 1 série; cor acompanha a barra)
+const BARLBL1={id:'bl1',afterDatasetsDraw(ch){const x=ch.ctx;x.save();x.font='800 13px system-ui,sans-serif';x.textAlign='center';x.textBaseline='bottom';
+  ch.data.datasets.forEach((ds,di)=>{const mt=ch.getDatasetMeta(di);if(mt.hidden)return;
+    mt.data.forEach((b,i)=>{const v=ds.data[i];if(v==null||v===0)return;
+      const bg=ds.backgroundColor; x.fillStyle=Array.isArray(bg)?(bg[i]||'#1D1E1C'):(bg||'#1D1E1C');
+      x.fillText(Math.round(v),b.x,b.y-5);});});
+  x.restore();}};
+const BARLBL={id:'bl',afterDatasetsDraw(ch){const x=ch.ctx;x.save();x.font='800 14px system-ui,sans-serif';x.textAlign='center';ch.data.datasets.forEach((ds,di)=>{const mt=ch.getDatasetMeta(di);if(mt.hidden)return;mt.data.forEach((b,i)=>{const v=ds.data[i];if(v==null)return;x.fillStyle=di===0?'#E11121':'#7c8288';x.fillText(Math.round(v),b.x,b.y-6);});});x.restore();}};
+function semChart(id){return new Chart($(id),{type:'bar',data:{labels:[],datasets:[{label:'Semana atual',data:[],backgroundColor:RED,borderRadius:4},{label:'Média histórica',data:[],backgroundColor:GREY,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:26}},plugins:{legend:{labels:{boxWidth:12,font:{size:12}}}},scales:{y:{ticks:{precision:0,font:{size:12}}},x:{ticks:{font:{size:12}}}}},plugins:[BARLBL]});}
+function weekdaySeries(memberSet){const dt={};AGG.forEach(g=>{if(!memberSet||memberSet.has(DAS[g.d]))dt[g.dia]=(dt[g.dia]||0)+g.p;});const ds=Object.keys(dt).sort();const hoje=ds[ds.length-1]||REF;const base=new Date(hoje+'T12:00');const mon=new Date(base);mon.setDate(base.getDate()-dow(hoje));const wk=[...Array(7)].map((_,i)=>{const d=new Date(mon);d.setDate(mon.getDate()+i);return d.toISOString().slice(0,10);});const hist={};ds.forEach(d=>{const w=dow(d);(hist[w]=hist[w]||[]).push(dt[d]);});return{cur:wk.map(d=>dt[d]||0),avg:WD.map((_,i)=>{const v=hist[i]||[];return v.length?+(v.reduce((a,b)=>a+b,0)/v.length).toFixed(1):0;})};}
+function drawSem(ch,memberSet){const s=weekdaySeries(memberSet);ch.data.labels=WD;ch.data.datasets[0].data=s.cur;ch.data.datasets[1].data=s.avg;ch.update();}
+const SETRED=new Set(TEAM_RED), SETVID=new Set(TEAM_VID);
+function renderP3(){
+  const dayTot={};
+  AGG.forEach(g=>{dayTot[g.dia]=(dayTot[g.dia]||0)+g.p;});
+  const dias=Object.keys(dayTot).sort();
+  const sel=$('diaSel').value;
+  const hoje=(sel&&dayTot[sel])?sel:dias[dias.length-1];
+  const hojeAgg=AGG.filter(g=>g.dia===hoje);
+  const pec=hojeAgg.reduce((s,g)=>s+g.p,0), atv=hojeAgg.reduce((s,g)=>s+g.a,0), min=hojeAgg.reduce((s,g)=>s+g.m,0);
+  const nDA=hojeAgg.length, rt=hojeAgg.reduce((s,g)=>s+g.r,0);
+  $('kpi3').innerHTML = kpi('Dia em análise',fmtD(hoje))+kpi('Peças trabalhadas',pec,'good')+kpi('Atividades',atv)+
+    kpi('DAs ativos',nDA)+kpi('Horas registradas',hor(min))+kpi('Média peças/DA',nDA?(pec/nDA).toFixed(1):'—')+
+    kpi('Etapas de retrabalho',rt,rt?'alert':'good');
+  // semana atual × média histórica por dia da semana
+  const base=new Date(hoje+'T12:00');
+  const mon=new Date(base); mon.setDate(base.getDate()-dow(hoje));
+  const wk=[...Array(7)].map((_,i)=>{const d=new Date(mon);d.setDate(mon.getDate()+i);return d.toISOString().slice(0,10);});
+  const hist={};
+  dias.forEach(d=>{const w=dow(d);(hist[w]=hist[w]||[]).push(dayTot[d]);});
+  chSem.data.labels=WD;
+  chSem.data.datasets[0].data=wk.map(d=>dayTot[d]||0);
+  chSem.data.datasets[1].data=WD.map((_,i)=>{const v=hist[i]||[];return v.length?+(v.reduce((a,b)=>a+b,0)/v.length).toFixed(1):0;});
+  chSem.update();
+  // tendência semanal: peças por hora
+  const wkA={};
+  AGG.forEach(g=>{const k=wkKey(g.dia);const w=wkA[k]=wkA[k]||{p:0,m:0};w.p+=g.p;w.m+=g.m;});
+  const wkNow=wkKey(hoje);
+  const wkKeys=Object.keys(wkA).sort().filter(k=>wkA[k].m>=300);
+  chTend.data.labels=wkKeys.map(k=>fmtD(k).slice(0,5));
+  chTend.data.datasets[0].data=wkKeys.map(k=>+(wkA[k].p/(wkA[k].m/60)).toFixed(2));
+  chTend.data.datasets[0].backgroundColor=wkKeys.map(k=>k===wkNow?ORANGE:GRAF);
+  chTend.update();
+  // diário com meses
+  const meses=uniq(dias.map(d=>d.slice(0,7))).sort();
+  if(!mesSel) mesSel=meses[meses.length-1];
+  $('mBtns').innerHTML=meses.map(m=>`<button data-m="${m}" class="${mesSel===m?'on':''}">${MNOME[m.slice(5)]}/${m.slice(2,4)}</button>`).join('')+`<button data-m="todos" class="${mesSel==='todos'?'on':''}">Tudo</button>`;
+  const dd=dias.filter(d=>mesSel==='todos'||d.slice(0,7)===mesSel);
+  chDias.data.labels=dd.map(fmtD);
+  chDias.data.datasets[0].data=dd.map(d=>dayTot[d]);
+  chDias.data.datasets[0].backgroundColor=dd.map(d=>d===hoje?RED:GRAF);
+  chDias.update();
+  // o que cada DA fez hoje
+  const rowsHoje=ACT.filter(r=>r.dia===hoje);
+  const por={}; rowsHoje.forEach(r=>{(por[r.da]=por[r.da]||[]).push(r);});
+  const pk=r=>r.pid+'|'+r.peca;
+  const dass=Object.keys(por).sort((a,b)=>uniq(por[b].map(pk)).length-uniq(por[a].map(pk)).length);
+  $('tbP3').querySelector('tbody').innerHTML=dass.map(d=>{
+    const rs=por[d].slice().sort((a,b)=>a.fim.localeCompare(b.fim));
+    const np=uniq(rs.map(pk)).length,h=rs.reduce((s,r)=>s+r.dur,0),rt2=rs.filter(r=>isRetrab(r.etapa)).length;
+    const fC=cnt(rs.map(r=>r.fmt));
+    const tops=Object.keys(fC).sort((a,b)=>fC[b]-fC[a]).slice(0,3).map(k=>`${k} (${fC[k]})`).join(' · ');
+    const open=EXP3.has(d);
+    const head=`<tr class="da-head${open?' exp':''}" data-da="${esc(d)}"><td><span class="car">&#9654;</span></td><td>${esc(sn(d))}</td><td><span class="badge b-blue">${esc(alocTxt(d))}</span></td><td><b>${np}</b></td><td>${rs.length}</td><td>${hor(h)}</td><td>${rt2?`<span class="badge b-orange">${rt2}</span>`:'—'}</td><td style="font-size:11.5px;color:#556">${esc(tops)}</td></tr>`;
+    const body=open?rs.map(r=>`<tr class="job-row"><td></td><td style="white-space:nowrap">${r.fim}</td><td>${esc(r.cliente)}</td><td colspan="3">${esc(r.peca)}</td><td>${hor(r.dur)}</td><td><span class="badge ${isRetrab(r.etapa)?'b-orange':'b-green'}">${esc(r.etapa)}</span></td></tr>`).join(''):'';
+    return head+body;
+  }).join('');
+  // mensal
+  const dasM=Object.keys(MES);
+  const totQ=i=>Object.values(MES[i]).reduce((s,v)=>s+v[0],0);
+  dasM.sort((a,b)=>totQ(b)-totQ(a));
+  const mss=uniq(dasM.flatMap(i=>Object.keys(MES[i]))).sort();
+  $('tbMes').querySelector('thead').innerHTML='<tr><th>DA</th>'+mss.map(m=>`<th>${MNOME[m.slice(5)]}/${m.slice(2,4)}</th>`).join('')+'<th>Total</th></tr>';
+  $('tbMes').querySelector('tbody').innerHTML=dasM.map(i=>{
+    const cells=mss.map(m=>{const v=MES[i][m];return v?`<td title="${hor(v[1])}">${v[0]}</td>`:'<td style="color:#bbb">—</td>';}).join('');
+    return `<tr><td>${esc(sn(DAS[i]))} <span class="badge b-blue" style="font-size:11.5px">${esc(aloc(DAS[i]).g)}</span></td>${cells}<td><b>${totQ(i)}</b></td></tr>`;
+  }).join('');
+}
+$('mBtns').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;mesSel=b.dataset.m;renderP3();});
+$('tbP3').addEventListener('click',e=>{const tr=e.target.closest('.da-head');if(!tr)return;const d=tr.dataset.da;EXP3.has(d)?EXP3.delete(d):EXP3.add(d);renderP3();});
+
+// ================= PÁGINAS 4/5 (times) =================
+const EXP4=new Set(), EXP5=new Set(), EXP7=new Set(), EXP8=new Set();
+let chDed, chD8;
+let chHouse;
+let chRed, chVid, chD4, chD5, chD7, chSemRed, chSemVid;
+function distChart(cv){
+  const c=new Chart($(cv),{type:'bar',data:{labels:[],datasets:[{data:[],backgroundColor:PAL,borderRadius:4}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{precision:0}}}}});
+  CHARTS.push(c); return c;
+}
+function renderTempos(elId, tt){
+  const rows=Object.entries(tt||{}).filter(([f])=>f!=='__def__').sort((a,b)=>b[1][1]-a[1][1]);
+  const def=(tt&&tt.__def__)?tt.__def__[0]:null;
+  const body=rows.map(([f,v])=>`<tr><td>${esc(f)}</td><td style="text-align:right"><b>${v[0]}</b> min</td><td style="text-align:right;color:#667">${hor(v[0])}</td><td style="text-align:right;color:#8a8f98">${v[1]}</td></tr>`).join('');
+  $(elId).innerHTML=`<table class="mini-t" style="width:100%;font-size:12px"><thead><tr><th style="text-align:left">Formato / tipo de job</th><th style="text-align:right">Mediana</th><th style="text-align:right">Horas</th><th style="text-align:right">Amostras</th></tr></thead><tbody>${body}</tbody></table>`+
+    (def!=null?`<div style="font-size:11.5px;color:#889;margin-top:6px">Formatos sem amostra suficiente usam o padrão da equipe: <b>${def} min</b>. Base: histórico 01/01–20/07.</div>`:'');
+}
+function renderDist(data, ch, infoId){
+  const tC=cnt(data.map(p=>p.tipo)), fC=cnt(data.map(p=>p.fmt));
+  const tK=Object.keys(tC).sort((a,b)=>tC[b]-tC[a]);
+  ch.data.labels=tK.map(k=>`${k} · ${tC[k]} (${(100*tC[k]/Math.max(1,data.length)).toFixed(0)}%)`);
+  ch.data.datasets[0].data=tK.map(k=>tC[k]); ch.update();
+  $(infoId).innerHTML=mini('Tipos de job',tC)+mini('Formatos',fC);
+}
+function teamChart(cv, onBar){
+  const c=new Chart($(cv),{type:'bar',data:{labels:[],datasets:[
+    {label:'Vencem hoje',data:[],backgroundColor:RED,borderRadius:3,stack:'s'},
+    {label:'Demais na pauta',data:[],backgroundColor:GREY,borderRadius:3,stack:'s'}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:12,font:{size:11}}}},
+      scales:{x:{stacked:true},y:{stacked:true,ticks:{precision:0}}},
+      onClick:(e,els)=>{ if(els.length) onBar(els[0].index); }}});
+  CHARTS.push(c); return c;
+}
+function renderTeam(data, team, kpiEl, tbEl, EXP, chart, tt, fixo){
+  const hoje=data.filter(p=>p.prazo===REF).length;
+  const atras=data.filter(p=>p.prazo&&p.prazo<REF).length;
+  const retr=data.filter(p=>isRetrab(p.status)).length;
+  $(kpiEl).innerHTML = kpi('Peças na pauta',data.length)+kpi('Vencem hoje',hoje,hoje?'alert':'good')+
+    kpi('Atrasadas',atras,atras?'alert':'good')+kpi('Pessoas',fixo?team.length:team.filter(m=>data.some(p=>p.das.includes(m))).length)+
+    kpi('Refação/Ajuste',retr,retr?'':'good')+(()=>{
+    const ms=team.filter(m=>data.some(p=>p.das.includes(m)));
+    const dem=ms.reduce((s,m)=>s+data.filter(p=>p.prazo===REF&&p.das.includes(m)).reduce((x,p)=>x+(tt?ttmin(tt,p):tmin(p)),0),0);
+    const cap=ms.reduce((s,m)=>s+capMembro(m),0);
+    return kpi('Carga em horas · hoje',`${hor(dem)} <span style="font-size:13px;color:#667">/ ${hor(cap)}</span>`,dem>cap?'alert':'')+
+           kpi('Ocupação do time',`${Math.round(100*dem/Math.max(1,cap))}%`,dem>cap?'alert':'good');})();
+  const membros=(fixo?[...team]:team.filter(m=>data.some(p=>p.das.includes(m))))
+    .sort((a,b)=>data.filter(p=>p.prazo===REF&&p.das.includes(b)).length-data.filter(p=>p.prazo===REF&&p.das.includes(a)).length);
+  if(chart){
+    chart._members=membros;
+    chart.data.labels=membros.map(sn);
+    chart.data.datasets[0].data=membros.map(m=>data.filter(p=>p.prazo===REF&&p.das.includes(m)).length);
+    chart.data.datasets[1].data=membros.map(m=>data.filter(p=>p.das.includes(m)&&p.prazo!==REF).length);
+    chart.update();
+  }
+  $(tbEl).querySelector('tbody').innerHTML = membros.map(m=>{
+    const jobs=data.filter(p=>p.das.includes(m)).sort((a,b)=>((b.prazo===REF)-(a.prazo===REF))||String(a.prazo||'9999').localeCompare(String(b.prazo||'9999')));
+    const c=jobs.filter(p=>p.prazo===REF).length;
+    const fC=cnt(jobs.map(p=>p.fmt));
+    const tops=Object.keys(fC).sort((a,b)=>fC[b]-fC[a]).slice(0,3).map(k=>`${k} (${fC[k]})`).join(' · ');
+    const at=jobs.filter(p=>p.prazo&&p.prazo<REF).length;
+    const sit=at?'<span class="badge b-red">'+at+' atrasada'+(at>1?'s':'')+'</span>':c?'<span class="badge b-orange">'+c+' p/ hoje</span>':(jobs.length?'<span class="badge b-green">ok</span>':'<span class="badge b-blue">sem pauta hoje</span>');
+    const open=EXP.has(m);
+    const capT2=capMembro(m);
+    const hM=jobs.filter(p=>p.prazo===REF).reduce((s,p)=>s+(tt?ttmin(tt,p):tmin(p)),0);
+    const ocm=Math.round(100*hM/Math.max(1,capT2));
+    const head=`<tr class="da-head${open?' exp':''}" data-da="${esc(m)}"><td><span class="car">&#9654;</span></td><td>${esc(sn(m))}<div style="margin-top:2px"><span class="badge b-blue" style="font-size:11.5px">${esc(aloc(m).f||aloc(m).g)}</span></div></td><td><b>${c}</b></td><td style="${hM>capT2?'color:var(--red);font-weight:700':''}">${hor(hM)}</td><td><div class="util-bar${hM>capT2?' over':''}"><span style="width:${Math.min(100,ocm)}%"></span></div></td><td>${jobs.length}</td><td style="font-size:11.5px;color:#556">${esc(tops)}</td><td>${sit}</td></tr>`;
+    const body=open?jobs.map(p=>{const s=situ(p.prazo);const cl=s==='Vence hoje'?'b-orange':s==='Atrasada'?'b-red':'b-green';
+      return `<tr class="job-row"><td></td><td colspan="4">${esc(p.cliente)} — ${esc(p.peca)}</td><td>${esc(p.fmt)}</td><td>${esc(p.status)}</td><td><span class="badge ${cl}">${s} · ${fmtD(p.prazo)}</span></td></tr>`;}).join(''):'';
+    return head+body;
+  }).join('');
+}
+
+// ===== controle de capacidade por time (mesmo modelo do painel dos DAs internos) =====
+// data = pauta do time · membros = equipe fixa · tt = tabela de tempos do próprio time
+function renderCapTime(elId, data, membros, tt, titulo, nota){
+  const el=$(elId); if(!el) return;
+  const ent={}, adm={}, admM={}, trab={};
+  AGG.filter(g=>g.dia===REF).forEach(g=>{ const m=DAS[g.d];
+    ent[m]=(ent[m]||0)+g.p; adm[m]=(adm[m]||0)+(g.pa||0); admM[m]=(admM[m]||0)+(g.ma||0); trab[m]=(trab[m]||0)+g.m; });
+  const abertas=m=>data.filter(p=>p.prazo===REF&&p.das.includes(m));
+  const _fora2=m=>(typeof AUSENTES!=='undefined'&&AUSENTES.includes(m));
+  const capRest=m=>(m&&_fora2(m))?0:horasRestantesMin();
+  const fimDia=capRest()<60;
+  let demT=0, nAbT=0, nEntT=0, nAdmT=0, mAdmT=0;
+  const rows=membros.map(m=>{
+    const js=abertas(m), n=js.length;
+    const dem=js.reduce((s,p)=>s+(tt?ttmin(tt,p):tmin(p)),0);
+    const e=ent[m]||0, a=adm[m]||0;
+    demT+=dem; nAbT+=n; nEntT+=e; nAdmT+=a; mAdmT+=(admM[m]||0);
+    const cr=capRest(m), oc=cr?Math.round(100*dem/cr):0, cabe=dem<=cr;
+    const hj=n?Math.round(dem/n):0;
+    const sit = _fora2(m) ? (n? '<span class="badge b-orange" title="Fora hoje com pauta em aberto: precisa remanejar">fora · '+n+' p/ remanejar</span>'
+                              : '<span class="badge b-grey">fora hoje</span>')
+              : (n===0&&e>0) ? '<span class="badge b-green">concluído</span>'
+              : (n===0 ? '<span class="badge b-blue">disponível</span>'
+              : (fimDia ? '<span class="badge b-orange">'+n+' para amanhã</span>'
+              : (oc>100 ? '<span class="badge b-red">SOBRECARGA</span>'
+              : (!cabe ? '<span class="badge b-orange">não cabe hoje</span>'
+              : '<span class="badge b-green">'+n+' em aberto</span>'))));
+    return `<tr><td>${esc(sn(m))}${SUP.includes(m)?' <span class="badge b-grey">supervisor</span>':''}</td>`
+      +`<td><b>${n+e}</b></td><td><b style="color:var(--green)">${e}</b></td>`
+      +`<td>${n?`<b>${hj}</b> min`:'<span style="color:#aab">—</span>'}</td>`
+      +`<td>${hor(dem)}</td><td style="${cabe?'':'color:var(--orange);font-weight:700'}">${hor(cr)}</td>`
+      +`<td>${fimDia?'<span style="color:#889;font-size:11.5px">fim do dia</span>':`<div class="util-bar${oc>100?' over':''}"><span style="width:${Math.min(100,oc)}%"></span></div>`}</td>`
+      +`<td>${fimDia?'<span style="color:#889">—</span>':`<b>${oc}%</b>`}</td><td>${n}</td><td>${sit}</td></tr>`;
+  }).join('');
+  const capSq=membros.reduce((s,m)=>s+capRest(m),0);
+  const oc=Math.round(100*demT/Math.max(1,capSq));
+  const medio=nAbT?Math.round(demT/nAbT):0;
+  const cabemPcs=medio?Math.floor(capSq/medio):0;
+  const sobra=cabemPcs-nAbT, defc=demT-capSq;
+  const st=fimDia?`<span class="badge b-orange">fim do expediente</span>`
+    :(oc>100?`<span class="badge b-red">SOBRECARGA · ${oc}%</span>`:oc>85?`<span class="badge b-orange">No limite · ${oc}%</span>`:`<span class="badge b-green">Ocupação ${oc}%</span>`);
+  const cell=(v,l,cls)=>`<div class="lt-i"><div class="lt-v ${cls||''}">${v}</div><div class="lt-l">${l}</div></div>`;
+  const veredito = fimDia ? `<b class="lt-w">${nAbT} para amanhã</b>`
+    : (defc>0 ? `<b class="lt-r">${Math.abs(sobra)} não cabe${Math.abs(sobra)!==1?'m':''} hoje</b>`
+              : `<b class="lt-g">folga de ${sobra} peça${sobra!==1?'s':''}</b>`);
+  el.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px">
+      <div><b style="color:var(--navy);font-size:13.5px">${titulo}</b>${nota?`<div style="font-size:12px;color:#778">${nota}</div>`:''}</div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <span class="badge b-blue">${nAbT+nEntT} peças na pauta de hoje · ${nAbT} em aberto</span>
+        <span class="badge b-blue">${hor(demT)} de execução / ${hor(capSq)} de capacidade</span>
+        ${nAdmT?`<span class="badge b-grey" title="Aprovação de briefing, arquivamento e afins: não é entrega de peça">${nAdmT} em etapa administrativa · ${hor(mAdmT)}</span>`:''}
+        ${st}</div></div>
+    <div class="scroll"><table><thead><tr><th>Profissional</th><th>Peças no dia</th>
+      <th title="Peças concluídas hoje em etapa produtiva">Entregues</th>
+      <th title="Tempo médio por peça em aberto, pela mediana do formato no histórico do time">Hora/job</th>
+      <th title="Soma do tempo de execução das peças em aberto">Horas de execução</th>
+      <th title="Tempo até o fim do expediente">Capacidade restante</th>
+      <th>Ocupação</th><th>%</th><th>Backlog (pend.)</th><th>Situação</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="leitura">${cell(nAbT+nEntT,'na pauta de hoje')+cell(nEntT,'entregues','lt-g')+cell(nAbT,'em aberto')
+      +cell(medio+' min','hora/job médio')+cell(hor(demT),'de execução')+cell(hor(capSq),'de capacidade')
+      +cell(cabemPcs,'cabem hoje')+`<div class="lt-i lt-vd">${veredito}</div>`}</div>`;
+}
+const rTeamR=()=>{renderTeam(REDACAO,TEAM_RED,'kpi4','tbRed',EXP4,chRed,TEMPOS_RED,true);
+  renderCapTime('govRed',REDACAO,TEAM_RED,TEMPOS_RED,'Equipe de Redação','texto, revisão e roteiro — tempo por formato medido no histórico da própria redação');};
+$('tbRed').addEventListener('click',e=>{const tr=e.target.closest('.da-head');if(!tr)return;const d=tr.dataset.da;EXP4.has(d)?EXP4.delete(d):EXP4.add(d);rTeamR();});
+const rTeamV=()=>renderTeam(VIDEO,TEAM_VID,'kpi5','tbVid',EXP5,chVid,TEMPOS_VID,true);
+const rTeamH=()=>renderTeam(PAUTA_HOUSE,HOUSE_DAS,'kpi7','tbHouse',EXP7,chHouse);
+const rTeamD=()=>renderTeam(PAUTA_DED,DED_DAS,'kpi8','tbDed',EXP8,chDed);
+$('tbDed').addEventListener('click',e=>{const tr=e.target.closest('.da-head');if(!tr)return;const d=tr.dataset.da;EXP8.has(d)?EXP8.delete(d):EXP8.add(d);rTeamD();});
+$('tbHouse').addEventListener('click',e=>{const tr=e.target.closest('.da-head');if(!tr)return;const d=tr.dataset.da;EXP7.has(d)?EXP7.delete(d):EXP7.add(d);rTeamH();});
+$('tbVid').addEventListener('click',e=>{const tr=e.target.closest('.da-head');if(!tr)return;const d=tr.dataset.da;EXP5.has(d)?EXP5.delete(d):EXP5.add(d);rTeamV();});
+
+
+// ================= PLAY × PRODUTIVIDADE =================
+let prodModo='sem', prodGrupo='';
+function prodPeriodos(){ const ks=Object.keys(typeof PROD!=='undefined'?PROD:{});
+  return ks.filter(k=>prodModo==='sem'? k.includes('-S') : !k.includes('-S')).sort().reverse(); }
+function renderProd(){
+  if(typeof PROD==='undefined'){ $('kpiP').innerHTML='<div class="cap">Sem relatório de atividades carregado.</div>'; return; }
+  const sel=$('prodPer'); const ps=prodPeriodos();
+  if(!sel.options.length || sel.dataset.modo!==prodModo){
+    sel.dataset.modo=prodModo;
+    sel.innerHTML=ps.map(k=>`<option value="${k}">${rotPer(k)}</option>`).join('');
+  }
+  const per=sel.value||ps[0]; if(!per){ $('kpiP').innerHTML=''; return; }
+  let L=(PROD[per]||[]).filter(r=>r.p>=5);            // amostra mínima: 5 peças no período
+  if(prodGrupo) L=L.filter(r=>r.g===prodGrupo);
+  const jorn=r=>r.d*480;
+  const ritmo=r=>Math.round(100*r.esp/Math.max(1,r.m));
+  const ader=r=>Math.round(100*r.m/Math.max(1,jorn(r)));
+  const tm=L.reduce((s,r)=>s+r.m,0), tp=L.reduce((s,r)=>s+r.p,0), te=L.reduce((s,r)=>s+r.esp,0);
+  const trw=L.reduce((s,r)=>s+r.rew,0), tad=L.reduce((s,r)=>s+r.adm,0);
+  const rEq=tm?Math.round(100*te/tm):0;
+  const adEq=L.length?Math.round(L.reduce((s,r)=>s+ader(r),0)/L.length):0;
+  $('kpiP').innerHTML =
+      kpi('Pessoas na amostra',L.length)
+    + kpi('Horas em play',hor(tm))
+    + kpi('Peças entregues',tp)
+    + kpi('Min por peça',tp?Math.round(tm/tp):0)
+    + kpi('Ritmo da equipe',rEq+'%',rEq>=100?'good':'alert')
+    + kpi('Retrabalho no tempo',Math.round(100*trw/Math.max(1,tm))+'%',trw/Math.max(1,tm)>.3?'alert':'')
+    + kpi('Aderência do apontamento',adEq+'%',adEq<60?'alert':'good');
+  const sinal=r=>{
+    const a=ader(r), q=ritmo(r);
+    if(a<50) return '<span class="badge b-grey" title="Apontou menos da metade da jornada: o ritmo calculado não é confiável">dado frágil</span>';
+    if(a>105) return '<span class="badge b-orange" title="Apontou mais que a jornada: provável timer esquecido">apontamento acima da jornada</span>';
+    if(q>170) return '<span class="badge b-orange" title="Muito acima do esperado: conferir se houve apontamento parcial">conferir</span>';
+    if(q<80) return '<span class="badge b-red">abaixo do ritmo</span>';
+    return '<span class="badge b-green">no ritmo</span>';
+  };
+  $('tbProd').querySelector('tbody').innerHTML = L.slice().sort((a,b)=>ritmo(b)-ritmo(a)).map(r=>{
+    const q=ritmo(r), a=ader(r), rw=Math.round(100*r.rew/Math.max(1,r.m));
+    return `<tr><td>${esc(sn(r.da))}</td><td><span class="badge b-blue">${esc(r.g||'—')}</span></td>
+      <td>${r.d}</td><td><b>${hor(r.m)}</b></td><td><b>${r.p}</b></td><td>${Math.round(r.m/r.p)}</td>
+      <td style="color:#778">${hor(r.esp)}</td>
+      <td><div class="util-bar${q<80?' over':''}"><span style="width:${Math.min(100,q/2)}%"></span></div><b>${q}%</b></td>
+      <td style="${rw>=40?'color:var(--orange);font-weight:700':''}">${rw}%</td>
+      <td style="${a<60?'color:var(--orange);font-weight:700':''}">${a}%</td>
+      <td>${sinal(r)}</td></tr>`;
+  }).join('') || '<tr><td colspan="11" style="color:#889">Ninguém com 5 peças ou mais neste período.</td></tr>';
+  $('prodNota').innerHTML = `<b>Ritmo</b> = tempo esperado das peças entregues ÷ horas em play. 100% significa entregar no tempo mediano do formato — e a mediana usada é a do grupo da pessoa, então redator não é comparado com editor de vídeo. `
+    + `<b>Aderência</b> = horas apontadas ÷ jornada dos dias trabalhados; abaixo de 60% o ritmo perde confiabilidade. `
+    + `Entram no quadro apenas quem entregou <b>5 peças ou mais</b> no período. Etapas administrativas (aprovação, briefing, relatório) não contam como peça: no período foram <b>${hor(tad)}</b>.`;
+}
+function rotPer(k){
+  if(k.includes('-S')){ const [y,w]=k.split('-S'); return `Semana ${parseInt(w)} · ${y}`; }
+  const [y,m]=k.split('-'); const MS=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  return `${MS[parseInt(m)-1]}/${y}`;
+}
+
+// ================= PÁGINA 6: TRÁFEGO =================
+let chTraf;
+function renderP6(){
+  const T=TRAF.slice().sort((a,b)=>String(a.prazo||'9999').localeCompare(String(b.prazo||'9999')));
+  const emTexto=T.filter(p=>/texto/i.test(p.status)).length;
+  const atras=T.filter(p=>p.prazo&&p.prazo<REF).length;
+  const hj=T.filter(p=>p.prazo===REF).length;
+  const horas=T.reduce((s,p)=>s+tmin(p),0);
+  $('kpi6').innerHTML = kpi('Peças no mês',T.length)+kpi('Vencem hoje',hj,hj?'alert':'good')+
+    kpi('Atrasadas',atras,atras?'alert':'good')+kpi('Em redação (texto)',emTexto,emTexto>T.length/2?'alert':'')+
+    kpi('Em arte/refação',T.length-emTexto)+kpi('Horas estimadas',hor(horas))+
+    kpi('Clientes',uniq(T.map(p=>p.cliente)).length);
+  // por dia
+  const dC={}; T.forEach(p=>{if(p.prazo)dC[p.prazo]=(dC[p.prazo]||0)+1;});
+  const dias=Object.keys(dC).sort();
+  chTraf.data.labels=dias.map(fmtD);
+  chTraf.data.datasets[0].data=dias.map(d=>dC[d]);
+  chTraf.data.datasets[0].backgroundColor=dias.map(d=>d<REF?RED:d===REF?ORANGE:GRAF);
+  chTraf.update();
+  // por semana
+  const wks={};
+  T.forEach(p=>{if(!p.prazo)return;const k=wkKey(p.prazo);(wks[k]=wks[k]||[]).push(p);});
+  const wkeys=Object.keys(wks).sort();
+  const wh=wkeys.map(k=>wks[k].reduce((s,p)=>s+tmin(p),0));
+  const avg=wh.reduce((a,b)=>a+b,0)/Math.max(1,wh.length);
+  $('tbSem6').querySelector('tbody').innerHTML=wkeys.map((k,i)=>{
+    const fim=new Date(k+'T12:00');fim.setDate(fim.getDate()+4);
+    const lab=`${fmtD(k).slice(0,5)} – ${String(fim.getDate()).padStart(2,'0')}/${String(fim.getMonth()+1).padStart(2,'0')}`;
+    const h=wh[i];
+    const leit=h>avg*1.25?'<span class="badge b-red">PICO — antecipar produção</span>':h>avg*1.05?'<span class="badge b-orange">Acima da média</span>':'<span class="badge b-green">Dentro da média</span>';
+    return `<tr><td>${lab}</td><td><b>${wks[k].length}</b></td><td>${hor(h)}</td><td>${leit}</td></tr>`;
+  }).join('');
+  const cC=cnt(T.map(p=>p.cliente)), fC=cnt(T.map(p=>p.fmt));
+  $('trafInfo').innerHTML=mini('Por cliente',cC)+mini('Por formato',fC);
+  // riscos: atrasadas ou prazo <= REF+2 dias e ainda em texto/refação/ajuste
+  const lim=new Date(REF+'T12:00');lim.setDate(lim.getDate()+2);
+  const limISO=lim.toISOString().slice(0,10);
+  const riscos=T.filter(p=>p.prazo&&(p.prazo<REF||(p.prazo<=limISO&&/texto|refa|ajuste/i.test(p.status))));
+  $('tbRisco').querySelector('tbody').innerHTML=riscos.length?riscos.map(p=>{
+    const grav=p.prazo<REF?'<span class="badge b-red">ATRASADA</span>':'<span class="badge b-orange">Prazo curto × etapa inicial</span>';
+    return `<tr><td>${esc(p.cliente)}</td><td>${esc(p.peca)}</td><td>${esc(p.fmt)}</td><td>${esc(p.status)}</td><td>${fmtD(p.prazo)}</td><td>${grav}</td></tr>`;
+  }).join(''):'<tr><td colspan="6" style="color:#2E7D32;font-weight:600">Nenhum risco no radar ✓</td></tr>';
+  // detalhe
+  $('nTraf').textContent=T.length;
+  $('tbTraf').querySelector('tbody').innerHTML=T.map(p=>{
+    const s=situ(p.prazo);const cl=s==='Vence hoje'?'b-orange':s==='Atrasada'?'b-red':'b-green';
+    return `<tr><td style="white-space:nowrap">${fmtD(p.prazo)}</td><td>${esc(p.cliente)}</td><td>${esc(p.peca)}</td><td>${esc(p.fmt)}</td><td>${esc(p.status)}</td><td>~${hor(tmin(p))}</td><td><span class="badge ${cl}">${s}</span></td></tr>`;
+  }).join('');
+}
+
+// ---------- página 9: peças avulsas (fora de escopo) ----------
+let chAvul;
+function renderP9(){
+  const A=AVULSO||{clientes:[],pecas:[],total:0,totalMes:0,mes:''};
+  const mesN=A.mes?`${MNOME[A.mes.slice(5)]}/${A.mes.slice(2,4)}`:'—';
+  const pct=A.totalMes?Math.round(100*A.total/A.totalMes):0;
+  $('kpi9').innerHTML=kpi('Mês de referência',mesN)+kpi('Peças avulsas',A.total,A.total?'alert':'good')+
+    kpi('Total do mês',A.totalMes)+kpi('% fora de escopo',pct+'%',pct>=10?'alert':'')+
+    kpi('Clientes atingidos',(A.clientes||[]).length);
+  const top=(A.clientes||[]).slice(0,15);
+  if(chAvul){chAvul.data.labels=top.map(c=>c.cliente.length>24?c.cliente.slice(0,24)+'…':c.cliente);
+    chAvul.data.datasets[0].data=top.map(c=>c.n);chAvul.update();}
+  $('tbAvulR').querySelector('tbody').innerHTML=(A.clientes||[]).map((c,i)=>
+    `<tr><td>${i+1}</td><td>${esc(c.cliente)}</td><td><b>${c.n}</b></td><td>${c.tot}</td><td style="${c.pct>=20?'color:var(--red);font-weight:700':''}">${c.pct}%</td></tr>`).join('');
+  $('nAvul').textContent=`${(A.pecas||[]).length} peças`;
+  $('tbAvul').querySelector('tbody').innerHTML=(A.pecas||[]).map(p=>
+    `<tr><td style="white-space:nowrap">${p.dia?fmtD(p.dia):'—'}</td><td>${esc(p.cliente)}</td><td>${esc(p.peca)}</td><td>${esc(p.fmt)}</td></tr>`).join('');
+}
+
+
+// ============ ESCOPO DO MÊS × CAPACIDADE ============
+let chCap;
+function diasUteis(ano,mes){ // mes 1-12
+  let n=0; const ult=new Date(ano,mes,0).getDate();
+  for(let d=1;d<=ult;d++){ const w=new Date(ano,mes-1,d).getDay(); if(w!==0&&w!==6) n++; }
+  return n;
+}
+function grupoDe(m){
+  const a=(typeof aloc==='function')?aloc(m):null;
+  return (a&&a.g)?a.g:'Outros';
+}
+function renderCap(){
+  const el=document.getElementById('kpiC'); if(!el) return;
+  const mes=($('mesCap')&&$('mesCap').value)||REF.slice(0,7);
+  const [ano,mm]=mes.split('-').map(Number);
+  const du=diasUteis(ano,mm);
+  const JOR8=JOR()*EFIC;                       // minutos por pessoa/dia (8h)
+
+  // PRODUZIDO no mês (fonte: relatório de atividades) — minutos reais por pessoa
+  const prod={}, pessoasProd=new Set();
+  AGG.filter(g=>g.dia.slice(0,7)===mes).forEach(g=>{
+    const m=DAS[g.d], gr=grupoDe(m);
+    prod[gr]=(prod[gr]||0)+g.m; pessoasProd.add(m);
+  });
+  // EM PAUTA no mês (estimativa por formato) — o que ainda vai consumir capacidade
+  const pauta={}, pessoasPauta=new Set();
+  const todas=[].concat(PAUTA, (typeof PAUTA_HOUSE!=='undefined'?PAUTA_HOUSE:[]));
+  todas.filter(p=>p.prazo && p.prazo.slice(0,7)===mes).forEach(p=>{
+    (p.das||[]).forEach(m=>{ const gr=grupoDe(m); pauta[gr]=(pauta[gr]||0)+tmin(p); pessoasPauta.add(m); });
+  });
+  // QUADRO ATIVO = quem trabalhou nos últimos 30 dias com registro (capacidade instalada real).
+  // Sem isso, um mês futuro mostraria só as poucas pessoas que já têm job atribuído,
+  // subestimando a capacidade da equipe.
+  const diasAG=[...new Set(AGG.map(g=>g.dia))].sort();
+  const corte=diasAG.slice(-30)[0]||'0000-00-00';
+  const ativos=new Set(AGG.filter(g=>g.dia>=corte).map(g=>DAS[g.d]));
+  const pessoasGrupo={};
+  [...ativos,...pessoasProd,...pessoasPauta].forEach(m=>{ const gr=grupoDe(m); (pessoasGrupo[gr]=pessoasGrupo[gr]||new Set()).add(m); });
+
+  const grupos=[...new Set([...Object.keys(prod),...Object.keys(pauta),...Object.keys(pessoasGrupo)])]
+    .filter(g=>g&&g!=='Outros'||((prod[g]||0)+(pauta[g]||0))>0);
+  let tCap=0,tProd=0,tPauta=0,tPes=0;
+  const linhas=grupos.map(g=>{
+    const nPes=(pessoasGrupo[g]?pessoasGrupo[g].size:0);
+    const cap=nPes*JOR8*du;
+    const pr=prod[g]||0, pa=pauta[g]||0, esc=pr+pa;
+    const pct=cap?Math.round(100*esc/cap):0;
+    tCap+=cap; tProd+=pr; tPauta+=pa; tPes+=nPes;
+    return {g,nPes,cap,pr,pa,esc,pct};
+  }).sort((a,b)=>b.esc-a.esc);
+  const escT=tProd+tPauta, pctT=tCap?Math.round(100*escT/tCap):0;
+
+  el.innerHTML = kpi('Mês',`${MNOME[String(mm).padStart(2,'0')]}/${String(ano).slice(2)}`)+
+    kpi('Dias úteis',du)+kpi('Pessoas ativas',tPes)+
+    kpi('Capacidade do mês',`${Math.round(tCap/60)}h`)+
+    kpi('Escopo do mês',`${Math.round(escT/60)}h`,pctT>100?'alert':'')+
+    kpi('Comprometimento',`${pctT}%`,pctT>100?'alert':(pctT<=85?'good':''))+
+    kpi('Saldo de capacidade',`${Math.round((tCap-escT)/60)}h`,(tCap-escT)<0?'alert':'good');
+
+  if(chCap){
+    chCap.data.labels=linhas.map(l=>l.g);
+    chCap.data.datasets[0].data=linhas.map(l=>Math.round(l.cap/60));
+    chCap.data.datasets[1].data=linhas.map(l=>Math.round(l.pr/60));
+    chCap.data.datasets[2].data=linhas.map(l=>Math.round(l.pa/60));
+    chCap.update();
+  }
+  $('tbCap').querySelector('tbody').innerHTML=linhas.map(l=>{
+    const sit=l.pct>100?'<span class="badge b-red">acima da capacidade</span>':(l.pct>85?'<span class="badge b-orange">no limite</span>':'<span class="badge b-green">dentro da capacidade</span>');
+    return `<tr><td><b>${esc(l.g)}</b></td><td>${l.nPes}</td><td>${Math.round(l.cap/60)}h</td><td>${Math.round(l.pr/60)}h</td><td>${Math.round(l.pa/60)}h</td><td><b>${Math.round(l.esc/60)}h</b></td><td style="${l.pct>100?'color:var(--red);font-weight:700':''}">${l.pct}%</td><td>${sit}</td></tr>`;
+  }).join('')+`<tr class="grp-head"><td>TOTAL</td><td>${tPes}</td><td>${Math.round(tCap/60)}h</td><td>${Math.round(tProd/60)}h</td><td>${Math.round(tPauta/60)}h</td><td>${Math.round(escT/60)}h</td><td>${pctT}%</td><td></td></tr>`;
+}
+
+
+// ============ COMPARATIVO DE PERÍODOS (semana / mês / ano) ============
+let chCmp, cmpModo='sem';
+function serieComparativa(modo){
+  const bal={};
+  AGG.forEach(g=>{
+    let k;
+    if(modo==='ano'){ k=g.dia.slice(0,4); }
+    else if(modo==='mes'){ k=g.dia.slice(0,7); }
+    else { const [y,m,d]=g.dia.split('-').map(Number); const dt=new Date(y,m-1,d);
+           dt.setDate(dt.getDate()-((dt.getDay()+6)%7)); k=localISO(dt); }
+    const o=bal[k]=bal[k]||{p:0,m:0}; o.p+=g.p; o.m+=g.m;
+  });
+  return Object.keys(bal).sort().map(k=>({k,...bal[k],ph:bal[k].m?+(bal[k].p/(bal[k].m/60)).toFixed(2):0}));
+}
+function rotuloPeriodo(k,modo){
+  if(modo==='ano') return k;
+  if(modo==='mes') return MNOME[k.slice(5)]+'/'+k.slice(2,4);
+  return 'sem. '+fmtD(k).slice(0,5);
+}
+function renderCmp(){
+  const el=document.getElementById('cmpResumo'); if(!el) return;
+  const modo=cmpModo, s=serieComparativa(modo);
+  const ultimos = modo==='sem' ? s.slice(-8) : (modo==='mes' ? s.slice(-12) : s);
+  const atual=ultimos[ultimos.length-1], ant=ultimos[ultimos.length-2];
+  const dpct=(a,b)=>b?Math.round(100*(a-b)/b):0;
+  if(!atual){ el.innerHTML='<div style="color:#889">Sem dados suficientes.</div>'; return; }
+  if(modo==='ano' && ultimos.length<2){
+    el.innerHTML=`<div class="cmp-nota"><b>${atual.p} peças</b> e <b>${Math.round(atual.m/60)}h</b> acumulados em ${atual.k}.
+      Para comparar ano contra ano é preciso incluir na pasta um relatório de atividades do ano anterior — com apenas ${atual.k} no histórico, não há base de comparação.</div>`;
+  } else {
+    const dp=dpct(atual.p,ant?ant.p:0), dh=dpct(atual.m,ant?ant.m:0), de=dpct(atual.ph,ant?ant.ph:0);
+    const seta=v=>`<span class="${v>=0?'up':'down'}">${v>=0?'▲':'▼'} ${Math.abs(v)}%</span>`;
+    el.innerHTML=`<div class="cmp-grid">
+      <div><div class="cmp-v">${atual.p}</div><div class="cmp-l">peças · ${rotuloPeriodo(atual.k,modo)}</div><div class="cmp-d">${seta(dp)} vs ${rotuloPeriodo(ant.k,modo)}</div></div>
+      <div><div class="cmp-v">${Math.round(atual.m/60)}h</div><div class="cmp-l">horas registradas</div><div class="cmp-d">${seta(dh)}</div></div>
+      <div><div class="cmp-v">${atual.ph}</div><div class="cmp-l">peças por hora</div><div class="cmp-d">${seta(de)} produtividade</div></div>
+    </div>`;
+  }
+  if(chCmp){
+    chCmp.data.labels=ultimos.map(x=>rotuloPeriodo(x.k,modo));
+    chCmp.data.datasets[0].data=ultimos.map(x=>x.p);
+    chCmp.data.datasets[0].backgroundColor=ultimos.map((x,i)=>i===ultimos.length-1?RED:NAVY);
+    chCmp.update();
+  }
+  $('tbCmp').querySelector('tbody').innerHTML=ultimos.slice().reverse().map((x,i,arr)=>{
+    const prev=arr[i+1]; const d=prev?dpct(x.p,prev.p):null;
+    return `<tr><td><b>${rotuloPeriodo(x.k,modo)}</b></td><td>${x.p}</td><td>${Math.round(x.m/60)}h</td><td>${x.ph}</td><td>${d===null?'—':`<span class="${d>=0?'up':'down'}">${d>=0?'+':''}${d}%</span>`}</td></tr>`;
+  }).join('');
+}
+
+// ---------- inicialização ----------
+const INIT={
+  p1(){ chTipoP=new Chart($('chTipoP'),{type:'bar',data:{labels:[],datasets:[{data:[],backgroundColor:PAL,borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{precision:0}}}}});CHARTS.push(chTipoP);renderP1(); },
+  p2(){ chMovDA=new Chart($('chMovDA'),{type:'bar',data:{labels:[],datasets:[{label:'Concluídos',data:[],backgroundColor:GREEN,borderRadius:3,stack:'s'},{label:'Pendentes',data:[],backgroundColor:GREY,borderRadius:3,stack:'s'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:12,font:{size:11}}}},scales:{x:{stacked:true,ticks:{autoSkip:false,maxRotation:75,minRotation:60,font:{size:9.5}}},y:{stacked:true,ticks:{precision:0}}}}});
+        chBal=new Chart($('chBal'),{type:'doughnut',data:{labels:['Concluídos','Pendentes','Novas'],datasets:[{data:[],backgroundColor:[GREEN,GREY,ORANGE],borderWidth:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:11}}}}}});
+        CHARTS.push(chMovDA,chBal);renderP2(); },
+  p3(){ chSem=semChart('chSem');
+        chTend=new Chart($('chTend'),{type:'bar',data:{labels:[],datasets:[{label:'Peças por hora',data:[],backgroundColor:[],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{title:{display:true,text:'peças/hora'}}}}});
+        chDias=new Chart($('chDias'),{type:'bar',data:{labels:[],datasets:[{label:'Peças',data:[],backgroundColor:[],borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{precision:0}}}}});
+        chCmp=new Chart($('chCmp'),{type:'bar',data:{labels:[],datasets:[{label:'Peças entregues',data:[],backgroundColor:NAVY,borderRadius:4}]},
+          options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:18}},plugins:{legend:{display:false}},scales:{y:{ticks:{precision:0}}}},plugins:[BARLBL1]});
+        CHARTS.push(chSem,chTend,chDias,chCmp);renderP3();renderCmp();
+        (()=>{const b=document.getElementById('cmpTabs'); if(b) b.addEventListener('click',e=>{const t=e.target.closest('button'); if(!t)return;
+          cmpModo=t.dataset.c; b.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===t)); renderCmp();});})(); },
+  p4(){ chRed=teamChart('chRed',i=>{const m=chRed._members[i];EXP4.has(m)?EXP4.delete(m):EXP4.add(m);rTeamR();}); chD4=distChart('chDist4'); renderDist(REDACAO,chD4,'dInfo4'); chSemRed=semChart('chSemRed'); drawSem(chSemRed,SETRED); CHARTS.push(chSemRed); renderTempos('tmpRed',TEMPOS_RED); rTeamR(); },
+  p5(){ chVid=teamChart('chVid',i=>{const m=chVid._members[i];EXP5.has(m)?EXP5.delete(m):EXP5.add(m);rTeamV();}); chD5=distChart('chDist5'); renderDist(VIDEO,chD5,'dInfo5'); chSemVid=semChart('chSemVid'); drawSem(chSemVid,SETVID); CHARTS.push(chSemVid); renderTempos('tmpVid',TEMPOS_VID); rTeamV(); },
+  p8(){ chDed=teamChart('chDed',i=>{const m=chDed._members[i];EXP8.has(m)?EXP8.delete(m):EXP8.add(m);rTeamD();}); chD8=distChart('chDist8'); renderDist(PAUTA_DED,chD8,'dInfo8'); rTeamD(); },
+  p7(){ chHouse=teamChart('chHouse',i=>{const m=chHouse._members[i];EXP7.has(m)?EXP7.delete(m):EXP7.add(m);rTeamH();}); chD7=distChart('chDist7'); renderDist(PAUTA_HOUSE,chD7,'dInfo7'); rTeamH(); },
+  pP(){ renderProd();
+        $('prodPer').addEventListener('change',renderProd);
+        $('prodTabs').addEventListener('click',e=>{const b=e.target.closest('button'); if(!b)return;
+          prodModo=b.dataset.t; $('prodTabs').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
+          $('prodPer').innerHTML=''; renderProd();});
+        $('prodGrp').addEventListener('click',e=>{const b=e.target.closest('button'); if(!b)return;
+          prodGrupo=b.dataset.g; $('prodGrp').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b)); renderProd();}); },
+  p6(){ chTraf=new Chart($('chTraf'),{type:'bar',data:{labels:[],datasets:[{label:'Peças',data:[],backgroundColor:[],borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:22}},plugins:{legend:{display:false}},scales:{y:{ticks:{precision:0}}}},plugins:[BARLBL1]});CHARTS.push(chTraf);renderP6(); },
+  pC(){ chCap=new Chart($('chCap'),{type:'bar',data:{labels:[],datasets:[
+        {label:'Capacidade',data:[],backgroundColor:'#c9ccc9',borderRadius:4},
+        {label:'Produzido',data:[],backgroundColor:NAVY,borderRadius:4},
+        {label:'Em pauta',data:[],backgroundColor:RED,borderRadius:4}]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:11}}}},scales:{y:{title:{display:true,text:'horas'},ticks:{precision:0}}}}});
+      CHARTS.push(chCap);
+      if($('mesCap')&&!$('mesCap').value){ $('mesCap').value=REF.slice(0,7); }
+      renderCap(); },
+  p9(){ chAvul=new Chart($('chAvul'),{type:'bar',data:{labels:[],datasets:[{label:'Peças avulsas',data:[],backgroundColor:RED,borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{precision:0}}}},plugins:[{id:'blA',afterDatasetsDraw(ch){const x=ch.ctx;x.save();x.font='800 12px system-ui,sans-serif';x.fillStyle='#161D25';x.textBaseline='middle';ch.getDatasetMeta(0).data.forEach((b,i)=>{const v=ch.data.datasets[0].data[i];if(v!=null)x.fillText(v,b.x+5,b.y);});x.restore();}}]});CHARTS.push(chAvul);renderP9(); },
+};
+(()=>{ const pz=uniq(PAUTA.map(p=>p.prazo).filter(Boolean)).sort(); const el=$('pautaDia');
+  el.min=REF; el.max=pz[pz.length-1]||REF; el.value=REF;
+  el.addEventListener('change',()=>{ if(inited.p1){ renderP1(); showTab('p1'); } });
+})();
+$('diasPauta').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; $('pautaDia').value=b.dataset.d; renderP1(); });
+(()=>{ const ds=uniq(AGG.map(g=>g.dia)).sort(); const el=$('diaSel');
+  el.min=ds[0]; el.max=ds[ds.length-1]; el.value=ds[ds.length-1];
+  el.addEventListener('change',()=>{ if(!inited.p3){ showTab('p3'); } else { renderP3(); showTab('p3'); } });
+})();
+(()=>{const mv=localStorage.getItem('metaPct'); if(mv) $('metaPct').value=mv;
+  $('metaPct').addEventListener('input',()=>{ localStorage.setItem('metaPct',$('metaPct').value); if(inited.p1) renderP1(); });
+$('fimExp').addEventListener('input',()=>{ if(inited.p1) renderP1(); });
+(()=>{const e=$('mesCap'); if(e) e.addEventListener('change',()=>{ if(inited.pC) renderCap(); });})();})();
+$('limite').addEventListener('input',()=>{ if(inited.p1) renderP1(); });
+$('jornada').addEventListener('input',()=>{ if(inited.p1) renderP1(); });
+applyHid();
+// BOOT BLINDADO: uma falha em qualquer bloco não pode deixar o dashboard em branco.
+// Já aconteceu duas vezes (Chart.defaults e ordem de declaração) — o erro parava tudo antes de abrir a aba.
+
+// ===== MOBILE: cada célula recebe o nome da coluna, para virar cartão no celular =====
+function rotularTabelas(raiz){
+  (raiz||document).querySelectorAll('table').forEach(t=>{
+    const hs=[...t.querySelectorAll('thead th')].map(th=>(th.textContent||'').trim());
+    if(!hs.length) return;
+    t.querySelectorAll('tbody tr').forEach(tr=>{
+      [...tr.children].forEach((td,i)=>{
+        if(td.hasAttribute('colspan')) { td.setAttribute('data-full','1'); return; }
+        const rot=hs[i];
+        if(rot && !td.hasAttribute('data-l')) td.setAttribute('data-l',rot);
+      });
+    });
+  });
+}
+// roda sozinho sempre que uma tabela é redesenhada
+(function(){
+  let t=null;
+  const obs=new MutationObserver(()=>{ clearTimeout(t); t=setTimeout(()=>rotularTabelas(),80); });
+  obs.observe(document.body,{childList:true,subtree:true});
+  rotularTabelas();
+})();
+
+function _boot(nome,fn){ try{ fn(); }catch(e){ console.error('[Farol] falha em '+nome+':',e&&e.message);
+  const b=document.getElementById('bootWarn');
+  if(b){ b.style.display='block'; b.innerHTML+=(b.innerHTML?' · ':'Aviso: ')+nome+' não carregou'; } } }
+_boot('cabeçalho',freshness);
+_boot('visão geral',renderExecbar);
+_boot('menu lateral',sideBadges);
+_boot('abrir a pauta',()=>showTab('p1'));   // showTab já executa INIT.p1() uma única vez
+// capacidade restante encolhe conforme o dia: recalcula sozinha a cada 3 min
+setInterval(()=>{ try{ if(inited.p1) renderP1(); if(inited.p4) rTeamR(); if(inited.p5) rTeamV(); }catch(e){} }, 180000);
+</script>
+</body>
+</html>
